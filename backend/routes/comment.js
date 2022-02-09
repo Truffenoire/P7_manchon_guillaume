@@ -6,10 +6,10 @@ const authCreate = require('../middleware/authCreate')
 const { createComment, getAllComment, getOneComment, udpadeComment, deleteComment } = require('../controllers/comment');
 
 
-router.get('/comment', getAllComment);
-router.get('/comment/:id', getOneComment);
-router.post('/comment/add', authCreate, createComment);
-router.patch('/comment/update/:id', auth, udpadeComment);
-router.delete('/comment/deleteOne/:id', auth, deleteComment);
+router.get('/:id/comment', getAllComment);
+router.get('/:id/comment/:commentId', getOneComment);
+router.post('/:id/comment', createComment);
+router.patch('/:id/comment/:commentId/update', udpadeComment);
+router.delete('/:id/comment/:commentId/deleteOne', deleteComment);
 
 module.exports = router;

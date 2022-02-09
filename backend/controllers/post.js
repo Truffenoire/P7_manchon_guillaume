@@ -2,6 +2,7 @@ const { Sequelize, Model, DataTypes } = require('sequelize')
 // const User = require('../models/user')
 // const bcrypt = require('bcrypt');
 const Post = require('../models/post')
+const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 // const auth = require('../middleware/auth')
 
@@ -29,13 +30,17 @@ const getOnePost = async (req, res, next) => {
     try {
         // Recherche de l'utilisateur et vérification
         let post = await Post.findOne({ where: { id: id }, raw: true })
+        // Problème de route je n'arrive pas a recuperer les comments ailleurs....
+        // let comments = await Comment.findAll({ where: {postId : id }})
         if (post === null) {
             return res.status(404).json({ message: 'Ce post n\'existe pas !' })
         }
-        return res.json({ onePost: post })
+        return res.status(200).json([{ onePost: post/*,  allComments: comments*/ }]);
+        //  next()
     } catch {
-        return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
+        return res.status(500).json({ message: 'Erreur de base de donnée' })
     }
+    
 }
 
 const updatePost = async (req, res, next) => {
