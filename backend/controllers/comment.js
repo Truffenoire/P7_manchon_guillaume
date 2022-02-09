@@ -7,7 +7,7 @@ const Post = require('../models/post')
 const createComment = async (req, res, next) => {
     const { body } = req;
     const { id } = req.params;
-    console.log({ body, id });
+    // console.log({ body, id });
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenId = decodedToken.id
@@ -28,7 +28,7 @@ const getAllComment = async (req, res, next) => {
 }
 const getOneComment = async (req, res, next) => {
     const { commentId } = req.params;
-    console.log(req.params);
+    // console.log(req.params);
     let comment = await Comment.findOne({where: { id : commentId }})
     return res.status(200).json({ comment })
 }
