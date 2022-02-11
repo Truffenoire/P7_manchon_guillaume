@@ -12,7 +12,7 @@ const { createOnePost, getOnePost, getAllPost, updatePost, deletePost } = requir
 router.get('/', getAllPost);
 router.get('/:id', getOnePost);
 router.post('/add', multer, createOnePost);
-router.patch('/update/:id', auth, updatePost);
+router.patch('/update/:id', multer, updatePost);
 router.delete('/deleteOne/:id', auth, deletePost);
 
 module.exports = router;

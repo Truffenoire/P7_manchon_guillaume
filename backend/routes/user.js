@@ -9,7 +9,7 @@ router.post('/signup', multer, signup);
 router.post('/login', login);
 router.get('/', getAll);
 router.get('/:id', getProfil);
-router.patch('/update/:id', updateOne);
+router.patch('/update/:id', multer, updateOne);
 router.delete('/deleteOne/:id', authCour, deleteOne);
 
 module.exports = router;

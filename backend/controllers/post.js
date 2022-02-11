@@ -48,17 +48,35 @@ const getOnePost = async (req, res, next) => {
 
 const updatePost = async (req, res, next) => {
     const { id } = req.params
-    try{
-        // Recherche du post et vérification non nul
-        let post = await Post.findOne({ where: {id: id}, raw: true})
-        if(post === null){
-            return res.status(404).json({ message: 'Ce post n\'existe pas !'})
+    if(req.file) {
+        await Post.findOne({ where: { id: id}, raw: true})
+            .then(post => {
+                const filename = post.urlImage.split('/images/')[1];
+                fs.unlink(`images/${filename}`, async () => {
+                    const postUpdated = 
+                    {   
+                        ...req.body,
+                        urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    }
+                    console.log(postUpdated);
+                    await Post.update(post = postUpdated, { where: { id : id}})
+                    return res.status(201).json({message: 'Photo de post modifiée.'})
+            })
+            }).catch(error => res.status(400).json({ message : "error" }));
+    }
+    else {
+        try{
+            // Recherche du post et vérification non nul
+            let post = await Post.findOne({ where: {id: id}, raw: true})
+            if(post === null){
+                return res.status(404).json({ message: 'Ce post n\'existe pas !'})
+            }
+            // Mise à jour de l'utilisateur
+            await Post.update( req.body, { where: {id: id}})
+            return res.json({ message: 'post modifié avec succès !'})
+        }catch(error){
+            return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
         }
-        // Mise à jour de l'utilisateur
-        await Post.update( req.body, { where: {id: id}})
-        return res.json({ message: 'post modifié avec succès !'})
-    }catch(error){
-        return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
     }
 }
 

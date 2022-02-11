@@ -69,23 +69,42 @@ const getProfil = async (req, res, next) => {
 // MODIFIER UN UTILISATEUR
 const updateOne = async (req, res, next) => {
     const { id } = req.params
-    try {
-        // Recherche de l'utilisateur et vérification
-        let user = await User.findOne({ where: { id: id }, raw: true })
-        if (user === null) {
-            return res.status(404).json({ message: 'Cet utilisateur n\'existe pas !' })
+
+    if(req.file) {
+        await User.findOne({ where: { id: id}, raw: true})
+            .then(user => {
+                const filename = user.urlImage.split('/images/')[1];
+                fs.unlink(`images/${filename}`, async () => {
+                    const userUpdated = 
+                    {   
+                        ...req.body,
+                        urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    }
+                    console.log(userUpdated);
+                    await User.update(user = userUpdated, { where: { id : id}})
+                    return res.status(201).json({message: 'Photo de profil modifiée.'})
+            })
+            }).catch(error => res.status(400).json({ message : "error" }));
+    }
+    else {
+        try {
+            // Recherche de l'utilisateur et vérification
+            let user = await User.findOne({ where: { id: id }, raw: true })
+            if (user === null) {
+                return res.status(404).json({ message: 'Cet utilisateur n\'existe pas !' })
+            }
+            // Mise à jour de l'utilisateur
+            // Création d'un objet pour hasher le mdp
+            let hash = await bcrypt.hash(user.password, 10)
+            let userUpdated = {
+                ...req.body,
+                password: hash
+            }
+            await User.update(user = userUpdated, { where: { id: id } })
+            return res.json({ message: 'Profil modifié avec succès !' })
+        } catch (error) {
+            return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
         }
-        // Mise à jour de l'utilisateur
-        // Création d'un objet pour hasher le mdp
-        let hash = await bcrypt.hash(user.password, 10)
-        let userUpdated = {
-            ...req.body,
-            password: hash
-        }
-        await User.update(user = userUpdated, { where: { id: id } })
-        return res.json({ message: 'Profil modifié avec succès !' })
-    } catch (error) {
-        return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
     }
 }
 // SUPPRIME
