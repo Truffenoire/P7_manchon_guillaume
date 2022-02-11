@@ -1,6 +1,9 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = require('../db/db');
 
+// Import Models
+const Comment = require('../models/comment')
+
 // MODEL POST
 const Post = sequelize.define('post', {
     userId : {
@@ -45,7 +48,14 @@ const Post = sequelize.define('post', {
         defaultValue: []
     },
 });
-
+Post.hasMany(Comment, {
+    foreignKey: {
+        name: "postId",
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+});
+Comment.belongsTo(Post);
 
 // Post.sync({alter: true});
 // Post.sync();

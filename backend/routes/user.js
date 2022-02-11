@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth')
+const authCour = require('../middleware/authCour')
+const multer = require('../middleware/multer-config')
 
-const { signup, login, deleteOne, getAll, updateOne } = require('../controllers/user');
+const { signup, login, deleteOne, getAll, getProfil, updateOne } = require('../controllers/user');
 
-router.post('/user/signup', signup);
-router.post('/user/login', login);
-router.get('/user/', getAll);
-router.patch('/user/update/:id', updateOne);
-router.delete('/user/deleteOne/:id', auth, deleteOne);
+router.post('/signup', multer, signup);
+router.post('/login', login);
+router.get('/', getAll);
+router.get('/:id', getProfil);
+router.patch('/update/:id', updateOne);
+router.delete('/deleteOne/:id', authCour, deleteOne);
 
 module.exports = router;

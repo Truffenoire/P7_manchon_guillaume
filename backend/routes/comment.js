@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth')
-const authComment = require('../middleware/authComment')
-const authCreate = require('../middleware/authCreate')
+
+const authComment = require('../middleware/authComment');
+const authCreate = require('../middleware/authCreate');
 
 const { createComment, getAllComment, getOneComment, udpadeComment, deleteComment } = require('../controllers/comment');
 

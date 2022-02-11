@@ -4,7 +4,10 @@ const sequelize = require('./db/db');
 const User = require('./models/user')
 const Post = require('./models/post')
 const Comment = require('./models/comment')
+const path = require('path');
 
+
+// Import des routes
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 const commentRoutes = require('./routes/comment');
@@ -12,6 +15,7 @@ const commentRoutes = require('./routes/comment');
 
 const app = express();
 
+app.use(express.json());
 // CONFIG DES HEADER
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,14 +26,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.json());
 
-app.use( userRoutes, postRoutes, commentRoutes );
-// app.use(  );
-// app.use(  );
+app.use('/post/images', express.static(path.join(__dirname, 'images')));
 
-
-
+app.use('/user', userRoutes);
+app.use('/post', postRoutes);
+app.use(commentRoutes);
 
 
 
