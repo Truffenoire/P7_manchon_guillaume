@@ -111,16 +111,15 @@ const likeUnlike = async (req, res, next) => {
     
     try{
         const post = await Post.findOne({where: { id : id }})
-        // console.log(post.userLiked);
+
         const postLiked = 
                     { ...post,
                         userLiked: [] };
-                    console.log(postLiked.userLiked);
+
                     switch(like) {
                         case 0 :
                             if(postLiked.userLiked.includes(userId)) {
                                 let indexUser = postLiked.userLiked.indexOf(userId)
-                                console.log(indexUser);
                                 postLiked.userLiked.splice(indexUser, 1)
                             }
                             break;

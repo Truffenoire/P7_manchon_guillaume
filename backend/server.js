@@ -32,7 +32,7 @@ const errorHandler = error => {
       break;
     default:
       throw error;
-  }
+  } 
 };
 
 const server = http.createServer(app);

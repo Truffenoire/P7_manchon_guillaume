@@ -13,6 +13,11 @@ const User = sequelize.define('user', {
         primaryKey: true,
         autoIncrement: true
     },
+    isAdmin: {
+        type: DataTypes.BOOLEAN(),
+        allowNull: false,
+        defaultValue: false
+    },
     username: {
         type: DataTypes.STRING,
         allowNull: false,
