@@ -5,6 +5,7 @@ const userValid = require('../validation/userValide')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
+const multer = require('multer');
 
 
 // CREER UN UTILISATEUR

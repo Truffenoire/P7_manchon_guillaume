@@ -6,14 +6,15 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs');
 
 
+
 const createOnePost = async (req, res, next) => {
     const { body } = req;
     // console.log(body);
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenId = decodedToken.id
-    console.log("TOKEN DANS CREATE POST", tokenId);
-    console.log(req.file, req.body);
+    // console.log("TOKEN DANS CREATE POST", tokenId);
+    console.log(req.file);
     await Post.create({ ...body,
                         urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
                         userId: tokenId })
@@ -29,19 +30,18 @@ const getAllPost = async (req, res, next) => {
 
 const getOnePost = async (req, res, next) => {
     const { id } = req.params;
+    console.log(id);
     try {
         // Recherche de l'utilisateur et vérification
-        let post = await Post.findAll({ where: { id: id }, include: Comment, raw: true })
-        // Problème de route je n'arrive pas a recuperer les comments ailleurs....
-        // let comments = await Comment.findAll({ where: {postId : id }})
-        console.log(post[1].text);
+        let post = await Post.findOne({ where: { id: id }, include: Comment, raw: true })
+        
         if (post === null) {
             return res.status(404).json({ message: 'Ce post n\'existe pas !' })
         }
         return res.status(200).json({ onePost: post/*,  allComments: comments*/ });
         //  next()
     } catch {
-        return res.status(500).json({ message: 'Erreur de base de donnée' })
+        return res.status(500).json({ message: 'Erreur de base de donnée du getOne' })
     }
     
 }
@@ -101,5 +101,39 @@ const deletePost = async (req, res, next) => {
     
 }
 
+const likeUnlike = async (req, res, next) => {
+    const { id } = req.params;
+    const like = req.body.like;
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const userId = decodedToken.id
+    // console.log(like);
+    
+    try{
+        const post = await Post.findOne({where: { id : id }})
+        // console.log(post.userLiked);
+        const postLiked = 
+                    { ...post,
+                        userLiked: [] };
+                    console.log(postLiked.userLiked);
+                    switch(like) {
+                        case 0 :
+                            if(postLiked.userLiked.includes(userId)) {
+                                let indexUser = postLiked.userLiked.indexOf(userId)
+                                console.log(indexUser);
+                                postLiked.userLiked.splice(indexUser, 1)
+                            }
+                            break;
+                        case 1 : postLiked.userLiked.push(userId)
+                        break;
+                    }
+                   
+                    await Post.update( postLiked, { where: { id : id}})
+                    return res.status(201).json({message: 'Post like/unLike.'})
 
-module.exports = { createOnePost, getAllPost, getOnePost, updatePost, deletePost }
+    }catch{
+        return res.status(500).json({error : "erreur de base de donnée dans le like"})
+    }
+}
+
+module.exports = { createOnePost, getAllPost, getOnePost, updatePost, deletePost, likeUnlike }
