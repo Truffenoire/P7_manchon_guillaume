@@ -9,16 +9,11 @@ module.exports = async (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenId = decodedToken.id
 
-    const isAdmin = await User.findOne({where : {id : tokenId}})
-    // console.log('USERID : ', tokenId);
-    // console.log(isAdmin.isAdmin);
-    // console.log(id);
-    if ( req.body.userId !== tokenId || tokenId != id ) {
-      return res.status(403).json( {message : 'ID invalid'})
+    if (req.body.userId && req.body.userId !== tokenId) {
+      return res.status(403).json({ message: 'Vous n\'êtes pas autorisé a faire celà dans le auth' })
     }
-    else if(isAdmin.isAdmin === true) {
-      next()
-    } else {
+    else {
+      console.log('UTILISATEUR ENREGISTRE');
       next();
     }
   } catch (error) {

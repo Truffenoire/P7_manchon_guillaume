@@ -38,6 +38,7 @@ const login = async (req, res, next) => {
         }
         // vérification du mot de passe
         let test = await bcrypt.compare(password, user.password)
+        console.log('MDP DANS TEST', test);
         if (!test) {
             return res.status(401).json({ message: 'Mauvais mot de passe !' })
         }
