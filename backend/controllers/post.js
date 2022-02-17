@@ -75,11 +75,7 @@ const updatePost = async (req, res, next) => {
             // Recherche du post et vérification non nul
             // ON NE TROUVE QUE LES POST QUE L'ON A CREE NOUS MEME
             let post = await Post.findOne({ where: { id: id/*, userId : req.body.userId*/ }, raw: true })
-            console.log(post);
-            // VERIFICATION DE L'ID POUR NE POUVOIR MODIFIER QUE SON PROPRE POST
-            if (post.userId !== req.body.userId) {
-                return res.status(403).json({ message: 'Vous n\'avez pas le droit de faire celà' })
-            }
+           
             if (post === null) {
                 return res.status(404).json({ message: 'Ce post n\'existe pas !' })
             }
@@ -96,11 +92,7 @@ const deletePost = async (req, res, next) => {
     const { id } = req.params;
     try {
         const post = await Post.findOne({ where: { id: id }, raw: true })
-        // VERIFICATION DE L'ID POUR NE POUVOIR MODIFIER QUE SON PROPRE POST
-        console.log(post);
-        // if (post.userId !== req.body.userId) {
-        //     return res.status(403).json({ message: 'Vous n\'avez pas le droit de faire celà' })
-        // }
+        
         const filename = post.urlImage.split('/images/')[1];
         console.log(filename);
         fs.unlink(`images/${filename}`, () => {
