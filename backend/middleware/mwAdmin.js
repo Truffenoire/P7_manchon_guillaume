@@ -26,6 +26,9 @@ module.exports = async (req, res, next) => {
             else if (comment.userId !== req.body.userId) {
                 return res.status(403).json({ message: 'Vous n\'avez pas le droit de faire celà dans les commentaire' })
             }
+            else if(comment.userId === req.body.userId) {
+                next()
+            }
 
         } catch (error) {
             res.status(401).json({ error: 'erreur dans le mwAdmin' });
@@ -46,6 +49,9 @@ module.exports = async (req, res, next) => {
             }
             else if (post.userId !== req.body.userId) {
                 return res.status(403).json({ message: 'Vous n\'avez pas le droit de faire celà dans les post' })
+            }
+            else if(post.userId === req.body.userId) {
+                next()
             }
 
         } catch (error) {
