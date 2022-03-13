@@ -1,0 +1,43 @@
+.account {
+    .titleProfil{
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-size: 18px;
+    }
+    .cardProfile {
+        display: flex;
+        flex-direction: column;
+    }
+    .name{
+        font-size: 22px;
+        border: 1px solid black;
+    }
+    img {
+        width: 75px;
+    }
+    .email {
+        font-size: 22px;
+        border: 1pw solid black;
+    }
+    .opaque{
+        position: absolute;
+        top: 0;
+        left: 0; 
+        background: rgba(184, 173, 173, 0.508);
+        width: 100%;
+        height: 100vh;
+        z-index: 900;
+    }
+    .deleteAccount{
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        width: 80%; 
+        border-radius: 20px;
+        text-align: center;
+        background-color: rgb(148, 148, 191);
+        transform: translate(-50%);
+        z-index: 1000;
+    }
+}

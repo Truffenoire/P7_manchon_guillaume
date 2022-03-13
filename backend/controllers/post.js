@@ -14,10 +14,18 @@ const createOnePost = async (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenId = decodedToken.id
     // console.log("TOKEN DANS CREATE POST", tokenId);
-    console.log(req.file);
+    // console.log(req.file);
+    // Pour poster des messages sans photos
+    let urlFile;
+    if (req.file != undefined) {
+        urlFile = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } else {
+        urlFile === null
+    }
+
     await Post.create({
         ...body,
-        urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        urlImage: urlFile,
         userId: tokenId
     })
         .then(() => { res.status(201).json({ message: "Votre post à été publié !" }) })
@@ -25,22 +33,31 @@ const createOnePost = async (req, res, next) => {
 }
 
 const getAllPost = async (req, res, next) => {
-    let posts = await Post.findAll()
-    console.log(posts.length);
-    return res.json({ allPosts: posts })
+    let posts = await Post.findAll({ include: Comment })
+    // Tri pour mettre le dernier post en premier
+    posts.sort(function compare(a, b) {
+        if (a.id > b.id)
+            return -1;
+        if (a.id < b.id)
+            return 1;
+        return 0
+    });
+
+    return res.json(posts)
 }
 
 const getOnePost = async (req, res, next) => {
     const { id } = req.params;
-    console.log(id);
+    // console.log(id);
     try {
         // Recherche de l'utilisateur et vérification
-        let post = await Post.findOne({ where: { id: id }, include: Comment, raw: true })
+        // RAW QUI FAIT L'AFFICHAGE EN comment.userid etc....
+        let post = await Post.findOne({ where: { id: id }, include: Comment /*, raw: true*/ })
 
         if (post === null) {
             return res.status(404).json({ message: 'Ce post n\'existe pas !' })
         }
-        return res.status(200).json({ onePost: post/*,  allComments: comments*/ });
+        return res.status(200).json(post);
         //  next()
     } catch {
         return res.status(500).json({ message: 'Erreur de base de donnée du getOne' })
@@ -50,13 +67,12 @@ const getOnePost = async (req, res, next) => {
 
 const updatePost = async (req, res, next) => {
     const { id } = req.params
+    console.log('BODY', req.body);
+    console.log('FILE', req.file);
     if (req.file) {
         await Post.findOne({ where: { id: id }, raw: true })
             .then(post => {
-                // VERIFICATION DE L'ID POUR NE POUVOIR MODIFIER QUE SON PROPRE POST
-                if (post.userId !== req.body.userId) {
-                    return res.status(403).json({ message: 'Vous n\'avez pas le droit de faire celà' })
-                }
+
                 const filename = post.urlImage.split('/images/')[1];
                 fs.unlink(`images/${filename}`, async () => {
                     const postUpdated =
@@ -64,7 +80,7 @@ const updatePost = async (req, res, next) => {
                         ...req.body,
                         urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                     }
-                    console.log(postUpdated);
+                    // console.log(postUpdated);
                     await Post.update(post = postUpdated, { where: { id: id } })
                     return res.status(201).json({ message: 'Photo de post modifiée.' })
                 })
@@ -75,7 +91,7 @@ const updatePost = async (req, res, next) => {
             // Recherche du post et vérification non nul
             // ON NE TROUVE QUE LES POST QUE L'ON A CREE NOUS MEME
             let post = await Post.findOne({ where: { id: id/*, userId : req.body.userId*/ }, raw: true })
-           
+
             if (post === null) {
                 return res.status(404).json({ message: 'Ce post n\'existe pas !' })
             }
@@ -90,19 +106,33 @@ const updatePost = async (req, res, next) => {
 
 const deletePost = async (req, res, next) => {
     const { id } = req.params;
+    console.log(id);
     try {
         const post = await Post.findOne({ where: { id: id }, raw: true })
-        
-        const filename = post.urlImage.split('/images/')[1];
-        console.log(filename);
-        fs.unlink(`images/${filename}`, () => {
-            Post.destroy({ where: { id: id }, raw: true })
+
+        if (post.urlImage) {
+            const filename = post.urlImage.split('/images/')[1];
+            console.log('FILENAME', filename);
+
+            fs.unlink(`images/${filename}`, () => {
+                Post.destroy({ where: { id: id }, raw: true })
+                    .then(post => {
+                        if (post === 0) return res.status(404).json({ message: 'post innexistant' })
+                        res.status(200).json({ message: 'post supprimé.' })
+                    })
+                    .catch(error => res.status(500).json(error))
+            });
+
+        } else {
+
+            Post.destroy({ where: { id: id } })
                 .then(post => {
                     if (post === 0) return res.status(404).json({ message: 'post innexistant' })
                     res.status(200).json({ message: 'post supprimé.' })
                 })
                 .catch(error => res.status(500).json(error))
-        });
+
+        }
 
     } catch {
         return res.status(500).json({ message: 'Erreur de base de donnée' })

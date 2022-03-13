@@ -2,6 +2,7 @@ const { Sequelize, Model, DataTypes } = require('sequelize')
 const jwt = require('jsonwebtoken')
 const Comment = require('../models/comment')
 const Post = require('../models/post')
+const User = require('../models/user')
 
 
 const createComment = async (req, res, next) => {
@@ -11,44 +12,50 @@ const createComment = async (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const tokenId = decodedToken.id
-    console.log("TOKEN DANS CREATE POST", tokenId);
-    await Comment.create({ ...body,
-                        userId: tokenId,
-                        postId: id })
+    // let user = await User.findByPk(id)
+    // console.log("TOKEN DANS CREATE POST", tokenId, id, body);
+    await Comment.create({
+        ...body,
+        // userImg: user.urlImage,
+        userId: tokenId,
+        postId: id
+    })
         .then(() => { res.status(201).json({ message: "Votre commentaire à été publié !" }) })
-        .catch(error => res.status(500).json({ error: error }))
+        .catch(error => res.status(500).json({ error }))
 }
 const getAllComment = async (req, res, next) => {
     const { id } = req.params;
     let post = await Post.findByPk(id)
-    let comments = await Comment.findAll({ where: { postId : id }})
-    console.log("LOG DANS COMMENT", comments.length);
+    let comments = await Comment.findAll({ where: { postId: id } })
+    // console.log("LOG DANS COMMENT", comments.length);
 
-    return res.status(200).json({ allComment: comments })
+    return res.status(200).json(comments)
 }
 const getOneComment = async (req, res, next) => {
     const { commentId } = req.params;
     // console.log(req.params);
-    let comment = await Comment.findOne({where: { id : commentId }})
+    let comment = await Comment.findOne({ where: { id: commentId } })
     return res.status(200).json({ comment })
 }
 const udpadeComment = async (req, res, next) => {
     const { commentId } = req.params;
-    try{
+    try {
         // Recherche du commentaire et vérification non nul
-        let comment = await Comment.findOne({ where: {id: commentId}, raw: true})
-        if(comment === null){
-            return res.status(404).json({ message: 'Ce commentaire n\'existe pas !'})
+        let comment = await Comment.findOne({ where: { id: commentId }, raw: true })
+        if (comment === null) {
+            return res.status(404).json({ message: 'Ce commentaire n\'existe pas !' })
         }
         // Mise à jour de l'utilisateur
-        await Comment.update( req.body, { where: {id: commentId}})
-        return res.json({ message: 'commentaire modifié avec succès !'})
-    }catch(error){
+        await Comment.update(req.body, { where: { id: commentId } })
+        return res.json({ message: 'commentaire modifié avec succès !' })
+    } catch (error) {
         return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
     }
 }
 const deleteComment = async (req, res, next) => {
     const { commentId } = req.params;
+    console.log(commentId);
+    console.log('REQ DANS DELETECOMMENT', req.body);
 
     Comment.destroy({ where: { id: commentId }, raw: true })
         .then(comment => {

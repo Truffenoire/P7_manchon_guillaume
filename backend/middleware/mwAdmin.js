@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
                 console.log('UTILISATEUR ADMIN');
                 next()
             }
-
+// MODIFIER CA, LA LOGIQUE
             else if (comment.userId !== req.body.userId) {
                 return res.status(403).json({ message: 'Vous n\'avez pas le droit de faire celà dans les commentaire' })
             }

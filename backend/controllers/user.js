@@ -11,34 +11,36 @@ const multer = require('multer');
 // CREER UN UTILISATEUR
 const signup = async (req, res, next) => {
     const { body } = req;
+    // console.log('BODY BACK', req.body);
+    // console.log('FILE BACK', req.file);
     // verification de la validité de la saisie du body
     const { error } = userValid(body)
     if (error) return res.status(401).json(error.details[0].message)
     await User.create({
         ...body,
         urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    })
+    }) 
         .then(() => { res.status(201).json({ message: "Votre compte à été créé, bienvenue !" }) })
         .catch(error => res.status(500).json(error))
 
 };
 //TROUVE UN UTILISATEUR
 const login = async (req, res, next) => {
-
+    // console.log(req);
     const { email, password, username } = req.body;
-    if (!email || !password || !username) {
+    if (!email || !password || !username) { 
         return res.status(400).json({ message: 'Veuillez saisir un compte existant.' })
     }
     try {
         // vérification présence d'un utilisateur
         let user = await User.findOne({ where: { email: email }, raw: true })
-        console.log("USER DANS LE LOGIN", user);
+        // console.log("USER DANS LE LOGIN", user);
         if (user === null) {
             return res.status(401).json({ message: 'Le compte n\'existe pas' })
         }
         // vérification du mot de passe
         let test = await bcrypt.compare(password, user.password)
-        console.log('MDP DANS TEST', test);
+        // console.log('MDP DANS TEST', test);
         if (!test) {
             return res.status(401).json({ message: 'Mauvais mot de passe !' })
         }
@@ -46,8 +48,8 @@ const login = async (req, res, next) => {
             // GENERATION DU TOKEN
             const token = jwt.sign(
                 { id: user.id, email: user.email }, 'RANDOM_TOKEN_SECRET', { expiresIn: '24h' })
-            console.log(token);
-            return res.json({ acces_token: token })
+            // console.log(token);
+            return res.json( {token, user} )
         }
     } catch (error) {
         if (error.name === "SequelizeDatabaseError") {
@@ -60,17 +62,19 @@ const login = async (req, res, next) => {
 // TROUVE TOUS LES UTILISATEURS
 const getAll = async (req, res, next) => {
     let users = await User.findAll()
-    return res.json({ allUsers: users })
+    return res.json( users )
 }
 // TROUVE UN SEUL AVEC SES POSTS
 const getProfil = async (req, res, next) => {
     const { id } = req.params;
     let users = await User.findOne({ where: { id: id }, include: Post })
-    return res.json({ profilUsers: users })
+    return res.json( users )
 }
 // MODIFIER UN UTILISATEUR
 const updateOne = async (req, res, next) => {
     const { id } = req.params
+    console.log('BODY DANS USER', req.body);
+    console.log('FILE DANS USER', req.file);
 
     if(req.file) {
         await User.findOne({ where: { id: id}, raw: true})
@@ -82,7 +86,7 @@ const updateOne = async (req, res, next) => {
                         ...req.body,
                         urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                     }
-                    console.log(userUpdated);
+                    // console.log(userUpdated);
                     await User.update(user = userUpdated, { where: { id : id}})
                     return res.status(201).json({message: 'Photo de profil modifiée.'})
             })
@@ -105,7 +109,7 @@ const updateOne = async (req, res, next) => {
             await User.update(user = userUpdated, { where: { id: id } })
             return res.json({ message: 'Profil modifié avec succès !' })
         } catch (error) {
-            return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
+            return res.status(500).json({ message: 'Erreur de base de donnée' })
         }
     }
 }
@@ -115,7 +119,7 @@ const deleteOne = async (req, res, next) => {
     const userImage = await User.findOne({ where: { id : id }, raw: true})
     const filename = userImage.urlImage.split('/images/')[1];
     try {
-        console.log(filename);
+        // console.log(filename);
         fs.unlink(`images/${filename}`, () => {
             User.destroy({ where: { id : id }, raw: true})
             .then(user => {

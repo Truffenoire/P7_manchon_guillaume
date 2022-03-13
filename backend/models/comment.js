@@ -6,18 +6,34 @@ const Comment = sequelize.define('comment', {
     userId : {
         type : DataTypes.INTEGER,
         allowNull : false,
+        // references: {
+        //     model: "Users",
+        //     key: "id"
+        // }
     },
     postId : {
         type : DataTypes.INTEGER,
         allowNull : false,
+        // references: {
+        //     model: "Posts",
+        //     key: "id"
+        // }
     },
     username: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        // references: {
+        //     model: "Users",
+        //     key: "username"
+        // }
+    },
+    userImg: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     text : {
         type : DataTypes.TEXT,
-        allowNull : true,
+        allowNull : false,
         validate:{
             is : /[^\<\>\\\/]/
         }
@@ -25,6 +41,6 @@ const Comment = sequelize.define('comment', {
 });
 
 
-// Comment.sync({force: true});
+// Comment.sync({alter: true});
 // Comment.sync();
 module.exports = Comment

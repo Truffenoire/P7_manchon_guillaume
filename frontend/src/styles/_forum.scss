@@ -1,0 +1,159 @@
+.container {
+    .formForum{
+        height: max-content;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        .labelFile{
+            border: 1px solid #6b85a9;
+            border-radius: 10px;
+            width: 120px;  
+            
+            span{
+                font-size: 15px;  
+            }  
+        }
+        input[type=file]{  
+            display: none; 
+        }
+        input, textarea{
+            margin: 3px 0px; 
+            border: 1px solid #6b85a9;  
+            border-radius: 10px; 
+        } 
+        button{
+            margin: 0 auto;
+            width: 30%;
+        }
+    }
+    .postContainer {
+        display: flex;
+        margin: 15px 0;
+        flex-direction: column;
+        width: 100%;
+        background: rgb(107,133,169);
+        background: linear-gradient(90deg, rgba(175,175,175,1) 0%, rgba(218,216,216,1) 40%, rgba(188,187,187,1) 78%); 
+
+        border-radius: 20px;
+        animation: commentApparition 0.3s ease-in-out;
+        .userNameProfil{
+            font-size: 20px; 
+        }
+        .imgProfilCard {
+            width: 30px;
+            border-radius: 50%; 
+        }
+        .imgPost{
+            align-items: center;
+            margin-left: auto; 
+            margin-right: auto;
+            width: 95%;
+            img{
+                 width: 100%
+            }
+        }
+        .userId{
+            display: flex;
+            justify-content: space-between;
+            background-color: #bfc0fe;  
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px; 
+            color: white;
+            padding: 5px;   
+            .upDatePost{
+                color: black;
+            }
+        }
+        .textPost{
+            padding: 10px; 
+        }
+        .comment{
+            width: 30px;
+            padding: 10px;
+        }
+        .formComment{
+            display: flex;
+            flex-direction: column; 
+            animation: commentBtn 0.3s ease-in-out; 
+            textarea{
+                border-radius: 20px;
+            }
+            button{
+                border: none; 
+                font-size: 22px;
+                margin: 0 auto;
+                background-color: transparent;
+                width: 30%;
+            }
+        }
+        .apercuCom{
+
+            .flexCom{
+                border: 1px solid white;
+                border-radius: 20px; 
+                padding: 5px;
+                margin: 5px 0px; 
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                .titleComment{
+                    img{
+                        width: 20px;
+                        border-radius: 50%;
+                    }
+                }
+                .commentCard{
+                    height: max-content;
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .userCom{
+                    margin: 5px;
+                }
+                .userText{
+                    margin: 5px;
+                }
+                .updateDelete{
+                    display: flex; 
+                    flex-wrap: nowrap; 
+                    span{
+                        padding: 0 5px;  
+                    }
+                }
+            }
+        }
+    }
+    .deletePost{
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        button{
+            background-color: transparent; 
+            border: none;
+            margin-bottom: 10px; 
+            font-size: 20px; 
+        }
+    }
+}
+
+@keyframes commentApparition {
+    0% {
+        transform: scale(0);
+    }
+    100%{ 
+        transform: scale(1);
+    }
+}
+@keyframes commentBtn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    70%{
+        opacity: 0.3;
+    }
+    100%{ 
+        opacity: 1; 
+        transform: translateY(0);
+    }
+}

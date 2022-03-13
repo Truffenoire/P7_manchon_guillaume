@@ -1,0 +1,25 @@
+.postForComment {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgb(255, 200, 200);
+    border: 2px solid rgb(153, 130, 130);
+    border-radius: 20px;
+
+    .imgPost{
+        align-items: center;
+        margin-left: auto; 
+        margin-right: auto;
+        width: 95%;
+        img{
+             width: 95%
+        }
+    }
+    .userId{
+        color: white;
+        padding: 10px;
+    }
+    .titlePost{
+        text-align: center;
+    }
+}

@@ -30,7 +30,7 @@ const User = sequelize.define('user', {
     },
     urlImage : {
         type : DataTypes.STRING,
-        allowNull : true,
+        allowNull : false,
         // validate:{
         //     is : /^http:\/\/localhost:3000\/[\w \-\_]*\.(jpg|jpeg|png|webp)$/
         // } 

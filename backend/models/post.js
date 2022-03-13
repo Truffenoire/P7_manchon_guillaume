@@ -14,30 +14,31 @@ const Post = sequelize.define('post', {
         //     key: "id"
         // }
     },
-    title : {
-        type : DataTypes.STRING,
-        allowNull : false,
-        validate:{
-            is : /[^\<\>\\\/]/
-        }
-    },
+    // title : {
+    //     type : DataTypes.STRING,
+    //     allowNull : false,
+    //     validate:{
+    //         is : /[^\<\>\\\/]/
+    //     }
+    // },
     text : {
         type : DataTypes.TEXT,
-        allowNull : true,
+        allowNull : false,
         validate:{
             is : /[^\<\>\\\/]/
         }
     },
-    fileName : {
+    userName : {
         type : DataTypes.STRING,
         allowNull : false,
+        
         // validate:{
         //     is : /^[\w \-\_]*\.(jpg|jpeg|png|webp)$/
         // }           
     },
     urlImage : {
         type : DataTypes.STRING,
-        allowNull : false,
+        allowNull : true,
         // validate:{
         //     is : /^http:\/\/localhost:3000\/[\w \-\_]*\.(jpg|jpeg|png|webp)$/
         // } 

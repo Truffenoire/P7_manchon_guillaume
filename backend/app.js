@@ -5,6 +5,7 @@ const User = require('./models/user')
 const Post = require('./models/post')
 const Comment = require('./models/comment')
 const path = require('path');
+const cors = require('cors')
 
 
 // Import des routes
@@ -16,6 +17,8 @@ const commentRoutes = require('./routes/comment');
 const app = express();
 
 app.use(express.json());
+app.use(cors())
+
 // CONFIG DES HEADER
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 
-app.use('/post/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/user', userRoutes);
 app.use('/post', postRoutes);
