@@ -142,11 +142,12 @@ const deletePost = async (req, res, next) => {
 
 const likeUnlike = async (req, res, next) => {
     const { id } = req.params;
+    console.log('REQ DES LIKE', req.body);
     const like = req.body.like;
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.id
-    // console.log(like);
+    console.log(like);
 
     try {
         const post = await Post.findOne({ where: { id: id } })
@@ -154,7 +155,7 @@ const likeUnlike = async (req, res, next) => {
         const postLiked =
         {
             ...post,
-            userLiked: []
+            userLiked: [...post.userLiked]
         };
 
         switch (like) {
@@ -164,7 +165,9 @@ const likeUnlike = async (req, res, next) => {
                     postLiked.userLiked.splice(indexUser, 1)
                 }
                 break;
-            case 1: postLiked.userLiked.push(userId)
+            case 1: {
+                postLiked.userLiked.push(userId)
+            }
                 break;
         }
 

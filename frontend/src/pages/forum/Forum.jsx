@@ -94,7 +94,7 @@ const Forum = ({ user, setUser, token, setToken }) => {
       {post
         .map((post, index) =>
           <div className='postContainer' key={post.id}>
-            <Card user={user} post={post} setPosted={setPosted} comments={comments} setComments={setComments} />
+            <Card user={user} setPosts={setPosts} post={post} setPosted={setPosted} comments={comments} setComments={setComments} />
             <EraseBtn user={user} post={post} setPosted={setPosted} />
             <ComView user={user} post={post} posted={posted} setPosted={setPosted} comments={comments} setComments={setComments} />
 

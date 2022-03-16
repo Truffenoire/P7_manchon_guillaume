@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
-import { FaCommentDots, FaMarker, FaTelegramPlane } from 'react-icons/fa'
+// import { Link } from 'react-router-dom'
+import { FaCommentDots, FaMarker, FaTelegramPlane, FaHandPeace, FaHandRock } from 'react-icons/fa'
 
 import Comment from './Comment/Comment'
 
 
-const Card = ({ post, user, posted, setPosted, comments, setComments }) => {
+const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }) => {
 
     const acces_forum = localStorage.getItem('keyToken')
     // const userId = user.id
@@ -63,6 +63,61 @@ const Card = ({ post, user, posted, setPosted, comments, setComments }) => {
             })
             .catch(err => console.log(err))
     }
+    const [like, setLike] = useState(post.userLiked)
+    const [userLike, setUserLike] = useState(like.includes(user.id))
+    const [liked, setLiked] = useState(post.userLiked.length)
+
+    const handleLike = async (e) => {
+        setUserLike(!userLike)
+        // console.log(!userLike);
+        let data;
+        if (userLike) {
+            data = {
+                like: 0
+            }
+        } else if (!userLike) {
+            data = {
+                like: 1
+            }
+        }
+        const dataLike = JSON.stringify(data)
+        console.log(dataLike);
+        // Pour liker un post
+        if (!userLike) {
+            await fetch(`http://localhost:3000/post/${post.id}/like`, {
+                method: 'POST',
+                headers: {
+                    'authorization': 'bearer ' + acces_forum,
+                    'Content-Type': 'application/json',
+                },
+                body: dataLike,
+            })
+                .then(res => {
+                    console.log(post);
+                })
+                .catch(err => console.log(err))
+        } 
+        // Pour unLike un post
+        else {
+            await fetch(`http://localhost:3000/post/${post.id}/like`, {
+                method: 'POST',
+                headers: {
+                    'authorization': 'bearer ' + acces_forum,
+                    'Content-Type': 'application/json',
+                },
+                body: dataLike,
+            })
+                .then(res => {
+                    // let indexUser = post.userLiked.indexOf(user.id)
+                    // setPosts(post.userLiked.splice(indexUser, 1))
+                    console.log(post);
+                })
+                .catch(err => console.log(err))
+            }
+            // met a jour le state sur le forum
+            setPosted(true)
+    }
+
 
     return updateState ? (
 
@@ -72,8 +127,10 @@ const Card = ({ post, user, posted, setPosted, comments, setComments }) => {
                     <div>
                         <img className='imgProfilCard' src={
                             usersSignup.map((usersSignup, index) => {
-                                if (post.userId === usersSignup.id) return usersSignup.urlImage
+                                if (post.userId === usersSignup.id) { return usersSignup.urlImage }
+                                else { return null }
                             }).join('')
+
                         } alt="pic-profil" />
                     </div>
 
@@ -85,7 +142,8 @@ const Card = ({ post, user, posted, setPosted, comments, setComments }) => {
                     <div>
                         <img className='imgProfilCard' src={
                             usersSignup.map((usersSignup, index) => {
-                                if (post.userId === usersSignup.id) return usersSignup.urlImage
+                                if (post.userId === usersSignup.id) { return usersSignup.urlImage }
+                                else { return null }
                             }).join('')
                         } alt="pic-profil" />
                     </div>
@@ -94,12 +152,21 @@ const Card = ({ post, user, posted, setPosted, comments, setComments }) => {
                     <div></div>
                 </div>
             }
-            <div className='titlePost'>{post.title}</div>
+            {/* <div className='titlePost'>{post.title}</div> */}
             <div className='textPost'>{post.text}</div>
             <div className='imgPost'>
                 <img src={post.urlImage} alt={post.urlImage} />
-                </div>
-            <div onClick={handleComment} className="comment"> <FaCommentDots /> {post.comments.length}</div>
+            </div>
+            <div className='footerCard'>
+                <div onClick={handleComment} className="comment"> <FaCommentDots /> {post.comments.length}</div>
+                {userLike ? (
+                    <div onClick={handleLike} className='likeUnLike'><FaHandPeace /> <span>{post.userLiked.length}</span></div>
+                )
+                    :
+                    (
+                        <div onClick={handleLike} className='likeUnLike'><FaHandRock /> <span>{post.userLiked.length}</span></div>
+                    )}
+            </div>
             {postComment ? (
                 <Comment comments={comments} setComments={setComments} user={user} post={post} setPosted={setPosted} setPostComment={setPostComment} />
             ) : (
@@ -108,9 +175,8 @@ const Card = ({ post, user, posted, setPosted, comments, setComments }) => {
         </div>
     ) : (
         <div className='card'>
-            <div className='userId'>post n° {post.id} poster par {post.userName} <span onClick={handleToggle} className='upDatePost'><FaMarker /></span></div>
+            <div className='userId'> {post.userName} <span onClick={handleToggle} className='upDatePost'><FaMarker /></span></div>
             <form id='myForm' name='myForm'>
-                <input defaultValue={post.title} onChange={(e) => setPostUpdate({ ...postUpdate, title: e.target.value, })} name='title' type="text" id='title' />
                 <textarea defaultValue={post.text} onChange={(e) => setPostUpdate({ ...postUpdate, text: e.target.value, })} name='text' type="text" id='text' />
                 <input defaultValue={post.image} onChange={(e) =>
                     setPostUpdate({ ...postUpdate, image: e.target.files[0], })} name='image' type="file" id='file' />

@@ -80,7 +80,10 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                                 {updateState ?
                                     <span onClick={handleToggle} data-index={e}><FaPencilAlt /></span>
                                     :
+                                    <>
                                     <button onClick={handleUpdate} data-index={e}><FaTelegramPlane /></button>
+                                    <span onClick={handleToggle} data-index={e}><FaPencilAlt /></span>
+                                    </>
                                 }
 
                                 <span onClick={handleDelete} data-index={e}><FaTrashAlt /></span>

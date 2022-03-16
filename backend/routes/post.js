@@ -10,9 +10,9 @@ const { createOnePost, getOnePost, getAllPost, updatePost, deletePost, likeUnlik
 
 router.get('/', getAllPost);
 router.get('/:id', getOnePost);
-router.post('/add', /*auth,*/ multer, createOnePost); /* faire fonctionner le auth qui bloque la demande */
+router.post('/add', auth, multer, createOnePost); /* faire fonctionner le auth qui bloque la demande */
 router.patch('/update/:id', auth, multer, updatePost);
-router.delete('/deleteOne/:id', /*auth, mwAdmin,*/ deletePost);
+router.delete('/deleteOne/:id', auth,/* mwAdmin,*/ deletePost);
 
 router.post('/:id/like', auth, likeUnlike);
 

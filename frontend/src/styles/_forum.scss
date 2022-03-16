@@ -71,6 +71,11 @@
             width: 30px;
             padding: 10px;
         }
+        .likeUnLike{
+            text-align: center;   
+            width: 40px;
+            padding: 10px; 
+        }
         .formComment{
             display: flex;
             flex-direction: column; 
@@ -121,6 +126,10 @@
                     }
                 }
             }
+        }
+        .footerCard{
+            display: flex;
+            justify-content: space-between;
         }
     }
     .deletePost{

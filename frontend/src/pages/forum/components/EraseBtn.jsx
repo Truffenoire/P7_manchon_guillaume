@@ -30,6 +30,10 @@ const EraseBtn = ({ user, post, setPosted }) => {
         // supprime le post
            fetch(`http://localhost:3000/post/deleteOne/${post.id}`, {
             method: 'DELETE',
+            headers: {
+              'authorization': 'bearer ' + acces_forum,
+              'Content-Type': 'application/json',
+            },
           })
             // setposted pour declanger le useEffect et actualiser la page
             .then(res => setPosted(true))
