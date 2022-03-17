@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaTrashAlt, FaPencilAlt, FaTelegramPlane } from "react-icons/fa";
 
 
@@ -6,10 +6,11 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
 
     const acces_forum = localStorage.getItem('keyToken')
     const commentaire = post.comments
+    const isAdmin = user.isAdmin
     // setComments(post.comments)
 
     const handleDelete = async (e, index) => {
-        const userId = JSON.stringify(user.id)
+
         // console.log(userId);
         const spanVisé = e.target.closest('span')
         const indexCom = spanVisé.getAttribute('data-index')
@@ -39,8 +40,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
     const handleUpdate = async (e) => {
         const btnVisé = e.target.closest('button')
         const indexCom = btnVisé.getAttribute('data-index')
-        // console.log(commentaire[indexCom].id);
-        // console.log(JSON.stringify(comments));
+
         await fetch(`http://localhost:3000/post/${commentaire[indexCom].postId}/comment/${commentaire[indexCom].id}/update`, {
             method: 'PATCH',
             headers: {
@@ -67,7 +67,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                     return 1;
                 return 0
             }).map((com, e, index) => {
-                return commentaire[e].userId === user.id ?
+                return commentaire[e].userId === user.id ? (
                     <div className='flexCom' key={com.id}>
                         <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
                         <div className='commentCard'>
@@ -81,8 +81,8 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                                     <span onClick={handleToggle} data-index={e}><FaPencilAlt /></span>
                                     :
                                     <>
-                                    <button onClick={handleUpdate} data-index={e}><FaTelegramPlane /></button>
-                                    <span onClick={handleToggle} data-index={e}><FaPencilAlt /></span>
+                                        <button onClick={handleUpdate} data-index={e}><FaTelegramPlane /></button>
+                                        <span onClick={handleToggle} data-index={e}><FaPencilAlt /></span>
                                     </>
                                 }
 
@@ -90,12 +90,22 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                             </div>
                         </div>
                     </div>
-                    :
-                    <div className='flexCom' key={com.id}>
-                        <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
-                        <span className='userText'>{com.text}</span>
-                        <span></span>
-                    </div>
+                )
+                    : isAdmin ? (
+                        <div className='flexCom' key={com.id}>
+                            <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
+                            <div className='commentCard'>
+                            <span className='userText'>{com.text}</span>
+                            <span onClick={handleDelete} data-index={e}><FaTrashAlt /></span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className='flexCom' key={com.id}>
+                            <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
+                            <span className='userText'>{com.text}</span>
+                            <span></span>
+                        </div>
+                    )
             }
             )}
         </div>

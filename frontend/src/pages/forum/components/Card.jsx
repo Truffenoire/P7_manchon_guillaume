@@ -45,8 +45,8 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
         e.preventDefault()
         const myForm = document.getElementById('myForm')
         let formData = new FormData(myForm);
-
-        await fetch(`http://localhost:3000/post/update/${post.id}`, {
+        
+        fetch(`http://localhost:3000/post/update/${post.id}`, {
             method: 'PATCH',
             headers: {
                 'authorization': 'bearer ' + acces_forum,
@@ -61,7 +61,7 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
                 setPosted(true)
                 setUpdateState(true)
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err.message))
     }
     const [like, setLike] = useState(post.userLiked)
     const [userLike, setUserLike] = useState(like.includes(user.id))

@@ -71,19 +71,31 @@ const updatePost = async (req, res, next) => {
     console.log('FILE', req.file);
     if (req.file) {
         await Post.findOne({ where: { id: id }, raw: true })
-            .then(post => {
-
-                const filename = post.urlImage.split('/images/')[1];
-                fs.unlink(`images/${filename}`, async () => {
+            .then(async post => {
+                
+                if(post.urlImage == null){
                     const postUpdated =
                     {
                         ...req.body,
                         urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                     }
-                    // console.log(postUpdated);
+                    console.log(postUpdated);
+                    await Post.update(post = postUpdated, { where: { id: id } })
+                    return res.status(201).json({ message: 'Photo de post modifiée.' })
+                }else {
+                    const filename = post.urlImage.split('/images/')[1];
+                    fs.unlink(`images/${filename}`, async () => {
+                    const postUpdated =
+                    {
+                        ...req.body,
+                        urlImage: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    }
+                    console.log(postUpdated);
                     await Post.update(post = postUpdated, { where: { id: id } })
                     return res.status(201).json({ message: 'Photo de post modifiée.' })
                 })
+                }
+                
             }).catch(error => res.status(400).json({ message: "error" }));
     }
     else {
