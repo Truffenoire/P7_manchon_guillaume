@@ -1,13 +1,24 @@
+
 .container {
+    // background: rgb(212,207,219);
+    // background: linear-gradient(90deg, rgba(212,207,219,1) 0%, rgba(255,255,255,1) 0%, rgba(150,150,150,1) 42%, rgba(139,139,139,1) 58%, rgba(255,255,255,1) 100%);
+    background: url('../../public/groupomaniaAccount.png') fixed; 
+    background-size: cover;  
+    background-position: center;
     .formForum{
         height: max-content;
+        margin-bottom: 10px;
         border-radius: 10px;
         display: flex;
         flex-direction: column;
         .labelFile{
-            border: 1px solid #6b85a9;
+            border: 1px solid #6b85a9;  
             border-radius: 10px;
-            width: 120px;  
+            color: white;
+            background-color: #091F43; 
+            box-shadow: 2px 2px 3px #D1515A;
+            text-align: center;
+            width: 140px; 
             
             span{
                 font-size: 15px;  
@@ -22,18 +33,21 @@
             border-radius: 10px; 
         } 
         button{
-            margin: 0 auto;
-            width: 30%;
+            align-self: flex-end; 
+            color: white;
+            background-color: #091F43; 
+            box-shadow: 2px 2px 3px #D1515A;
+            font-size: 20px;
+            width: 15%;
         }
     }
     .postContainer {
         display: flex;
-        margin: 15px 0;
+        margin: 3px 0;
         flex-direction: column;
-        width: 100%;
-        background: rgb(107,133,169);
-        background: linear-gradient(90deg, rgba(175,175,175,1) 0%, rgba(218,216,216,1) 40%, rgba(188,187,187,1) 78%); 
-
+        // width: 100%;
+        color: white;
+        background: #091F43;  
         border-radius: 20px;
         animation: commentApparition 0.3s ease-in-out;
         .userNameProfil{
@@ -41,13 +55,13 @@
         }
         .imgProfilCard {
             width: 30px;
+            height: 30px;
+            object-fit: cover; 
             border-radius: 50%; 
         }
         .imgPost{
             align-items: center;
-            margin-left: auto; 
-            margin-right: auto;
-            width: 95%;
+            width: 100%;
             img{
                  width: 100%
             }
@@ -55,13 +69,14 @@
         .userId{
             display: flex;
             justify-content: space-between;
-            background-color: #bfc0fe;  
+            background-color: #D1515A; 
             border-top-left-radius: 18px;
             border-top-right-radius: 18px; 
             color: white;
             padding: 5px;   
             .upDatePost{
-                color: black;
+                color: white; 
+                padding: 5px;
             }
         }
         .textPost{
@@ -78,32 +93,38 @@
         }
         .formComment{
             display: flex;
-            flex-direction: column; 
             animation: commentBtn 0.3s ease-in-out; 
             textarea{
-                border-radius: 20px;
+                flex-grow: 1; 
+                border-radius: 10px; 
             }
             button{
+                color: white;
                 border: none; 
                 font-size: 22px;
-                margin: 0 auto;
                 background-color: transparent;
-                width: 30%;
+                width: 15%;
             }
         }
         .apercuCom{
-
+            width: 100%;
             .flexCom{
-                border: 1px solid white;
-                border-radius: 20px; 
+                border-top: 3px solid #D1515A; 
                 padding: 5px;
                 margin: 5px 0px; 
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+                .commentDate{
+                    align-self: flex-end;
+                    font-size: 12px;
+                    color: gray;
+                }
                 .titleComment{
                     img{
                         width: 20px;
+                        height: 20px;
+                        object-fit: cover;
                         border-radius: 50%;
                     }
                 }
@@ -130,6 +151,12 @@
         .footerCard{
             display: flex;
             justify-content: space-between;
+            align-items: center; 
+            border-top: 1px solid #D1515A;
+            .postDate{
+                font-size: 14px;
+                color: gray;
+            }
         }
     }
     .deletePost{
@@ -137,10 +164,35 @@
         justify-content: flex-end;
         width: 100%;
         button{
+            color: white; 
             background-color: transparent; 
             border: none;
             margin-bottom: 10px; 
             font-size: 20px; 
+        }
+    }
+}
+@media screen and (min-width: 768px){
+    .header{
+        nav{ 
+            gap: 30%; 
+        }
+    }
+    .container{ 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .formForum{
+            width: 500px; 
+        }
+        .postContainer{
+            width: 500px;
+            #myForm{
+                #text{
+                    width: 400px;  
+                    height: 200px;
+                }
+            }
         }
     }
 }

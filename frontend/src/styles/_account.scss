@@ -1,25 +1,66 @@
 .account {
+    background: url('../../public/groupomaniaAccount.png'); 
+    background-position: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    height: 600px; 
+    color: white;
+    #myForm{
+        width: 80%; 
+        align-items: center;
+        input, textarea, button { 
+            width: 50%;
+        }
+    }
     .titleProfil{
         display: flex;
+        color: #D1515A;
+        text-shadow: 2px 2px 2px black;
         align-items: center;
         justify-content: space-around;
         font-size: 18px;
+        span{
+            color: white; 
+            font-size: 40px;
+        }
     }
+    .btnDeco{
+        display: flex;
+        justify-content: space-around;
+        button{
+            color: white;
+            -webkit-box-shadow: 5px 5px 40px -4px #000000; 
+            box-shadow: 5px 5px 40px -4px white;
+            background-color: #091F43;   
+            border: none;
+            border-radius: 5px;
+            margin: 1rem;  
+            padding: 0.5rem;
+        } 
+    } 
     .cardProfile {
         display: flex;
-        flex-direction: column;
-    }
-    .name{
-        font-size: 22px;
-        border: 1px solid black;
-    }
-    img {
-        width: 75px;
-    }
-    .email {
+        justify-content: space-around; 
+        align-items: center;
+        // flex-direction: column;
+        .userName{
+            text-align: center;
+            font-size: 20px;
+        }
+        .email {
         font-size: 22px;
         border: 1pw solid black;
     }
+        .photoProfil{
+            font-size: 22px;
+            .imgProfil { 
+                -webkit-box-shadow: 5px 5px 40px -4px #000000; 
+                box-shadow: 5px 5px 40px -4px #000000;
+                width: 150px;
+            }
+        }
+    }
+    
     .opaque{
         position: absolute;
         top: 0;
@@ -33,11 +74,40 @@
         position: absolute;
         top: 30%;
         left: 50%;
-        width: 80%; 
+        width: 60%; 
+        height: 180px;
         border-radius: 20px;
         text-align: center;
-        background-color: rgb(148, 148, 191);
+        background-color: #091F43; 
         transform: translate(-50%);
         z-index: 1000;
+    }
+}
+@media screen and (min-width: 768px){
+    .account{
+        
+        #myForm{
+            display: flex;
+            flex-direction: column;
+        }
+        .cardProfile{
+            .photoProfil{
+                .imgProfil{
+                    width: 225px;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 320px){
+    .account{ 
+        #myForm{
+            input, textarea, button { 
+                width: 100%;  
+            }
+        }
+        .cardProfile{
+            flex-direction: column;   
+        }
     }
 }

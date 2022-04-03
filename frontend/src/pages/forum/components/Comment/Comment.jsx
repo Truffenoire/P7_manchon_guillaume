@@ -39,8 +39,8 @@ const Comment = ({ post, user, setPosted, setPostComment, comments, setComments 
     return (
         <>
             <div className="formComment">
-                <h4>Votre commentaire</h4>
-                <textarea onChange={(e) => setCom({ ...com, text: e.target.value, })} type="text" />
+                {/* <h4>Votre commentaire</h4> */}
+                <textarea onChange={(e) => setCom({ ...com, text: e.target.value, })} placeholder="Ecrire un commentaire..." type="text" />
                 <button onClick={handleclick} ><FaTelegramPlane /></button>
             </div>
         </>

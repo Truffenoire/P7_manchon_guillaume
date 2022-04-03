@@ -1,0 +1,19 @@
+.notFound{
+    display: flex;
+    justify-content: center;
+    .notTxt{
+        margin-top: 50px;
+    }
+    .notImg{
+        img{
+            position: absolute;
+            top: 0;
+            left: 0; 
+            width: 100%;
+            height: 700px;  
+            background-size: cover; 
+            background-position: center;
+            z-index: -1;
+        }
+    }
+} 

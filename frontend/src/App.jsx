@@ -13,23 +13,24 @@ import { useState } from "react"
 
 function App() {
 
-  const [ user, setUser] = useState({});
-  const [ token, setToken] = useState({});
-  const [ post, setPosts] = useState({});
+  const [user, setUser] = useState({});
+  const [token, setToken] = useState({});
+  const [post, setPosts] = useState({});
+  const [comments, setComments] = useState([])
 
   return (
     <div className="App">
-      <Header user={user}/>
-      
-      <Routes>
-        <Route path="/" element={<Home setUser={setUser} />} />
-        <Route path="/login" element={ <Login user={user} setUser={setUser} token={token} setToken={setToken} />} />
-        <Route path="/forum/:id" element={<Forum user={user} setUser={setUser} token={token} setToken={setToken}/>} />
-        <Route path="/compte/:id" element={<Account user={user} setUser={setUser} />} />
-        <Route path="/comment/:id" element={<Comment post={post} user={user} token={token}/>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+        <Header user={user} /> 
+    
+        <Routes>
+          <Route path="/" element={<Home setUser={setUser} />} />
+          <Route path="/login" element={<Login user={user} setUser={setUser} token={token} setToken={setToken} />} />
+          <Route path="/forum/:id" element={<Forum comments={comments} setComments={setComments} user={user} setUser={setUser} token={token} setToken={setToken} />} />
+          <Route path="/compte/:id" element={<Account comments={comments} setComments={setComments} user={user} setUser={setUser} />} />
+          <Route path="/comment/:id" element={<Comment comments={comments} setComments={setComments} post={post} user={user} token={token} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
   )
 }
 

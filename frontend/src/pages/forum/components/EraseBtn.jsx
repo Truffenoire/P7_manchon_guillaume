@@ -1,4 +1,6 @@
 import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { Flip } from 'react-toastify';
 import { FaTrash } from "react-icons/fa";
 
 
@@ -25,7 +27,9 @@ const EraseBtn = ({ user, post, setPosted }) => {
         },
       })
         // setposted pour declanger le useEffect et actualiser la page
-        .then(res => setPosted(true))
+        .then(res => {
+          setPosted(true)
+        })
         .catch(err => alert("commentaire non trouvé !"));
     }
     // supprime le post
@@ -37,7 +41,20 @@ const EraseBtn = ({ user, post, setPosted }) => {
       },
     })
       // setposted pour declanger le useEffect et actualiser la page
-      .then(res => setPosted(true))
+      .then(res => {
+        toast.error('Message supprimé !' , {
+          theme: "colored",
+          transition: Flip,
+          position: "bottom-center",
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          })
+        setPosted(true)
+      })
       .catch(err => alert("post non trouvé !"));
   }
 
@@ -46,12 +63,14 @@ const EraseBtn = ({ user, post, setPosted }) => {
       <button onClick={
         handleDelete
       }><FaTrash /></button>
+      <ToastContainer />
     </div>
   ) : isAdmin  ? (
     <div className="deletePost">
       <button onClick={
         handleDelete
       }><FaTrash /></button>
+      {/* <ToastContainer /> */}
     </div>
   ) : (
     null

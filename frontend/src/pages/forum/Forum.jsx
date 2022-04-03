@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import { Zoom } from 'react-toastify';
 import EraseBtn from './components/EraseBtn';
 import Oups from '../../icons/icon-left-font.png';
 import Card from './components/Card'
@@ -7,16 +9,11 @@ import ComView from './components/ComView'
 
 import { FaTelegramPlane } from "react-icons/fa";
 
-
-
-
-const Forum = ({ user, setUser, token, setToken }) => {
+const Forum = ({ user, setUser, token, setToken, comments, setComments }) => {
 
   const { id } = useParams();
   const [posted, setPosted] = useState(false)
   const [post, setPosts] = useState([])
-  // recuperation des commentaires
-  const [comments, setComments] = useState([])
 
   const acces_forum = localStorage.getItem('keyToken')
   // Maintient de la session
@@ -44,9 +41,9 @@ const Forum = ({ user, setUser, token, setToken }) => {
   }, [posted, setPosted, comments, setComments]);
 
   // Pour poster un message 
-  const [newPost, setNewPost] = useState()
+  const [newPost, setNewPost] = useState({})
 
-  const handleClick = async (e, index) => {
+  const handleSubmit = async (e, index) => {
 
     e.preventDefault()
     let formData = new FormData();
@@ -54,6 +51,7 @@ const Forum = ({ user, setUser, token, setToken }) => {
     formData.append("text", newPost.text)
     formData.append("title", newPost.title)
     formData.append("image", newPost.image)
+
     for (let value of formData.values()) {
       console.log(value);
       console.log([value][0]);
@@ -68,7 +66,19 @@ const Forum = ({ user, setUser, token, setToken }) => {
     })
       // setposted pour declanger le useEffect et actualiser la page
       .then((res) => {
+        toast.success('Message partagé !' , {
+          theme: "colored",
+          position: "bottom-center",
+          autoClose: 1000,
+          transition: Zoom,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          })
         setPosted(true)
+        setNewPost({ ...newPost, text:"" })
         console.log(post);
       })
       .catch(err => console.log(err))
@@ -78,10 +88,10 @@ const Forum = ({ user, setUser, token, setToken }) => {
   return acces_forum ? (
     <div className="container">
 
-      <form className="formForum">
-        <h3>Ajoutez votre message</h3>
+      <form onSubmit={handleSubmit} className="formForum">
+        <h2>Ajoutez votre message</h2>
         {/* <input onChange={(e) => setNewPost({ ...newPost, title: e.target.value, })} placeholder='Titre' type="text" id='title' /> */}
-        <textarea onChange={(e) => setNewPost({ ...newPost, text: e.target.value, })} placeholder='Message' type="text" id='text' required />
+        <textarea onChange={(e) => setNewPost({ ...newPost, text: e.target.value })} placeholder='Message' type="text" id='text' value={newPost.text} required />
         <label className='labelFile' htmlFor="file">
           <input onChange={(e) =>
             setNewPost({ ...newPost, image: e.target.files[0], })} type="file" id='file' />
@@ -89,7 +99,8 @@ const Forum = ({ user, setUser, token, setToken }) => {
           {/* <span className='fileAdd'>Photo ajouté !</span> */}
 
         </label>
-        <button onClick={handleClick}><FaTelegramPlane /></button>
+        <button type='submit'><FaTelegramPlane /></button>
+        <ToastContainer />
       </form>
       {post
         .map((post, index) =>

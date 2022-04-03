@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const auth =require('../middleware/auth')
-const mwAdmin =require('../middleware/mwAdmin')
 const multer = require('../middleware/multer-config');
 
 const { createOnePost, getOnePost, getAllPost, updatePost, deletePost, likeUnlike } = require('../controllers/post');

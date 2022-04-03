@@ -26,10 +26,25 @@ const createComment = async (req, res, next) => {
 const getAllComment = async (req, res, next) => {
     const { id } = req.params;
     let post = await Post.findByPk(id)
-    let comments = await Comment.findAll({ where: { postId: id } })
+    let comments = await Comment.findAll({ where: { userId: id } })
     // console.log("LOG DANS COMMENT", comments.length);
-
     return res.status(200).json(comments)
+}
+const patchAllComment = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        let post = await Post.findByPk(id)
+        let comments = await Comment.findAll({ where: { userId: id } })
+        let user = await User.findOne({ where: { id: id } })
+        await Comment.update({
+            userImg: user.urlImage
+        }, {where: { userId: id}})
+        // console.log("LOG DANS COMMENT", comments.length);
+        return res.status(200).json(comments) 
+
+    } catch (error) {
+        return res.status(500).json({ message: 'Erreur de base de donnée', error: error })
+    }
 }
 const getOneComment = async (req, res, next) => {
     const { commentId } = req.params;
@@ -66,4 +81,4 @@ const deleteComment = async (req, res, next) => {
 }
 
 
-module.exports = { createComment, getAllComment, getOneComment, udpadeComment, deleteComment }
+module.exports = { createComment, getAllComment, getOneComment, udpadeComment, deleteComment, patchAllComment }

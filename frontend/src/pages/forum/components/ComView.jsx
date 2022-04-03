@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import DayJS from 'react-dayjs';
 import { FaTrashAlt, FaPencilAlt, FaTelegramPlane } from "react-icons/fa";
+
 
 
 const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
@@ -18,7 +20,6 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
         // console.log(commentaire[indexCom].id);
 
         await fetch(`http://localhost:3000/post/${commentaire[indexCom].postId}/comment/${commentaire[indexCom].id}/deleteOne`, {
-            // mode: 'no-cors',
             method: 'DELETE',
             headers: {
                 'authorization': 'bearer ' + acces_forum,
@@ -51,10 +52,16 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
         })
             // set pour declanger le useEffect et actualiser la page
             .then((res) => {
+                res.json()
                 setUpdateState(!updateState)
-                setComments(null)
+                // setComments()
             })
-            .catch(err => alert("commentaire non trouvé !"));
+            // .then((data) => {
+            //     setComments()
+            //     console.log(data);
+            //     console.log(comments);
+            // })
+            .catch(err => console.log(err));
 
     }
 
@@ -89,6 +96,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                                 <span onClick={handleDelete} data-index={e}><FaTrashAlt /></span>
                             </div>
                         </div>
+                        <DayJS className='commentDate' element='div' format='DD-MM-YYYY à HH:mm:ss'>{comments.createdAt}</DayJS>
                     </div>
                 )
                     : isAdmin ? (
@@ -98,12 +106,14 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                             <span className='userText'>{com.text}</span>
                             <span onClick={handleDelete} data-index={e}><FaTrashAlt /></span>
                             </div>
+                            <DayJS className='commentDate' element='div' format='DD-MM-YYYY à HH:mm:ss'>{comments.createdAt}</DayJS>
                         </div>
                     ) : (
                         <div className='flexCom' key={com.id}>
                             <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
                             <span className='userText'>{com.text}</span>
                             <span></span>
+                            <DayJS className='commentDate' element='div' format='DD-MM-YYYY à HH:mm:ss'>{comments.createdAt}</DayJS>
                         </div>
                     )
             }

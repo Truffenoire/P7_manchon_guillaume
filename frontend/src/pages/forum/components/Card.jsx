@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import { Zoom } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DayJS from 'react-dayjs';
 import { FaCommentDots, FaMarker, FaTelegramPlane, FaHandPeace, FaHandRock } from 'react-icons/fa'
 
 import Comment from './Comment/Comment'
@@ -45,7 +48,7 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
         e.preventDefault()
         const myForm = document.getElementById('myForm')
         let formData = new FormData(myForm);
-        
+
         fetch(`http://localhost:3000/post/update/${post.id}`, {
             method: 'PATCH',
             headers: {
@@ -60,6 +63,16 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
                 };
                 setPosted(true)
                 setUpdateState(true)
+                toast.success('Message mis à jour !', {
+                    position: "bottom-center",
+                    autoClose: 500,
+                    transition: Zoom,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
             })
             .catch(err => console.log(err.message))
     }
@@ -68,14 +81,35 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
     const [liked, setLiked] = useState(post.userLiked.length)
 
     const handleLike = async (e) => {
+
         setUserLike(!userLike)
         // console.log(!userLike);
         let data;
         if (userLike) {
+            toast.info('UnLike !', {
+                position: "bottom-center",
+                autoClose: 500,
+                transition: Zoom,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
             data = {
                 like: 0
             }
         } else if (!userLike) {
+            toast.success('Like !', {
+                position: "bottom-center",
+                autoClose: 500,
+                transition: Zoom,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
             data = {
                 like: 1
             }
@@ -96,7 +130,7 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
                     console.log(post);
                 })
                 .catch(err => console.log(err))
-        } 
+        }
         // Pour unLike un post
         else {
             await fetch(`http://localhost:3000/post/${post.id}/like`, {
@@ -113,9 +147,9 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
                     console.log(post);
                 })
                 .catch(err => console.log(err))
-            }
-            // met a jour le state sur le forum
-            setPosted(true)
+        }
+        // met a jour le state sur le forum
+        setPosted(true)
     }
 
 
@@ -159,12 +193,14 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
             </div>
             <div className='footerCard'>
                 <div onClick={handleComment} className="comment"> <FaCommentDots /> {post.comments.length}</div>
+                <DayJS className='postDate' element='div' format='DD-MM-YYYY à HH:mm:ss'>{post.createdAt}</DayJS>
                 {userLike ? (
                     <div onClick={handleLike} className='likeUnLike'><FaHandPeace /> <span>{post.userLiked.length}</span></div>
                 )
                     :
                     (
-                        <div onClick={handleLike} className='likeUnLike'><FaHandRock /> <span>{post.userLiked.length}</span></div>
+                        <div onClick={handleLike} className='likeUnLike'><FaHandRock /> <span>{post.userLiked.length}</span>
+                            <ToastContainer /></div>
                     )}
             </div>
             {postComment ? (
@@ -175,7 +211,18 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
         </div>
     ) : (
         <div className='card'>
-            <div className='userId'> {post.userName} <span onClick={handleToggle} className='upDatePost'><FaMarker /></span></div>
+            <div className='userId'>
+                <div>
+                    <img className='imgProfilCard' src={
+                        usersSignup.map((usersSignup, index) => {
+                            if (post.userId === usersSignup.id) { return usersSignup.urlImage }
+                            else { return null }
+                        }).join('')
+                    } alt="pic-profil" />
+                </div>
+                <div className='userNameProfil'>{post.userName}</div>
+                <span onClick={handleToggle} className='upDatePost'><FaMarker /></span>
+            </div>
             <form id='myForm' name='myForm'>
                 <textarea defaultValue={post.text} onChange={(e) => setPostUpdate({ ...postUpdate, text: e.target.value, })} name='text' type="text" id='text' />
                 <input defaultValue={post.image} onChange={(e) =>

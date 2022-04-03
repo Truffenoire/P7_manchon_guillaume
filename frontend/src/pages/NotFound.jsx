@@ -1,9 +1,13 @@
 import React from 'react';
+import notFoundImg from '../icons/icon-above-font.svg'
 
 const NotFound = () => {
     return (
         <div className='notFound'>
-            Rien du tout à cette adresse a part une Errreur 404 !            
+            <h3 className='notTxt'>Rien du tout à cette adresse, ah si, une Erreur 404 !</h3>
+            <div className="notImg">
+                <img src={notFoundImg} alt="Erreur 404" />
+            </div>            
         </div>
     );
 };

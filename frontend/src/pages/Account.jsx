@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { Zoom, Flip } from 'react-toastify';
 import { BiDotsHorizontal } from "react-icons/bi";
 
-
-const Account = ({ user, setUser }) => {
+const Account = ({ user, setUser, comments, setComments }) => {
 
     const navigate = useNavigate()
     const acces_forum = localStorage.getItem('keyToken')
@@ -13,13 +14,25 @@ const Account = ({ user, setUser }) => {
         localStorage.clear()
         await setUser("")
         navigate('/')
+        setTimeout(() => {
+            toast.warn('Déconnection !', {
+                theme: "colored",
+                position: "bottom-center",
+                autoClose: 1000,
+                transition: Flip,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }, 500)
     }
     const [updateUser, setUpdateUser] = useState(true)
-
     const handleToggle = async (e) => {
         setUpdateUser(!updateUser)
-        console.log(!updateUser);
     }
+
     // Maintient de la session avec mise a jour du state
     useEffect(() => {
         const userId = localStorage.getItem('userId')
@@ -31,10 +44,15 @@ const Account = ({ user, setUser }) => {
             .catch(err => console.log(err))
     }, [setUser])
 
+    // Modification du profil
     const handleUpdate = async (e) => {
+
         e.preventDefault()
-        const myForm = document.getElementById('myForm')
-        let formData = new FormData(myForm);
+        let formData = new FormData();
+        // On contruit le formulaire avant l'envoi
+        formData.append("username", user.username)
+        formData.append("email", user.email)
+        formData.append("image", user.image)
 
         await fetch(`http://localhost:3000/user/update/${user.id}`, {
             method: 'PATCH',
@@ -43,19 +61,34 @@ const Account = ({ user, setUser }) => {
             },
             body: formData,
         })
-            .then(response => {
-                response.json()
-            })
-            .then((data) => {
-                for (var value of formData.values()) {
-                    console.log(value);
-                };
+            .then(response => response.json())
+            .then(async (data) => {
+                // On recupère l'user dans la base de donnée pour le mettre à jour.
+                await fetch(`http://localhost:3000/user/${user.id}`, {
+                    method: 'GET',
+                    headers: {
+                        'authorization': 'bearer ' + acces_forum,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(async (data) => {
+                        setUser(data)
+                        // On met à jour les commentaires de l'utilisateur pour la photo de profil
+                        await fetch(`http://localhost:3000/post/${user.id}/comment`, {
+                            method: 'PATCH',
+                        })
+                            .then(res => res.json())
+                            .then((data) => {
+                                setComments(data)
+                            })
+                            .catch(err => console.log(err))
+                    })
+                    .catch(err => console.log(err))
                 setUpdateUser(!updateUser)
-                console.log(user);
             })
             .catch(err => console.log(err))
-
     }
+
     const [deleteAccount, setDeteleAccound] = useState(false)
     const handleDelete = async (e) => {
         e.preventDefault()
@@ -68,45 +101,63 @@ const Account = ({ user, setUser }) => {
         const inputDelete = formDelete.childNodes[0]
         let valueInput = inputDelete.value
         const confirmErase = valueInput.toUpperCase()
-        if(confirmErase === "OUI" ){
+        if (confirmErase === "OUI") {
             // supprime le compte
-           fetch(`http://localhost:3000/user/deleteOne/${user.id}`, {
-            method: 'DELETE',
-            headers: {
-                'authorization': 'bearer ' + acces_forum,
-                'Content-Type': 'application/json',
-              },
-          })
-            // setposted pour declanger le useEffect et actualiser la page
-            .then(res => res.json())
-            .then(res => {
-                console.log(res)
-                localStorage.clear()
-                setUser("")
-                navigate('/')
+            fetch(`http://localhost:3000/user/deleteOne/${user.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'authorization': 'bearer ' + acces_forum,
+                    'Content-Type': 'application/json',
+                },
             })
-            .catch(err => alert("utilisateur introuvable !"));
-            
-        }else{
+                // setposted pour declanger le useEffect et actualiser la page
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    localStorage.clear()
+                    setUser("")
+                    navigate('/')
+                    setTimeout(() => {
+                        toast.error('Compte supprimé !', {
+                            theme: "colored",
+                            position: "bottom-center",
+                            autoClose: 1000,
+                            transition: Zoom,
+                            hideProgressBar: false,
+                            closeOnClick: false,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }, 1000)
+                })
+                .catch(err => alert("utilisateur introuvable !"));
+
+        } else {
             // renvoi au profil
             setDeteleAccound(!deleteAccount)
         }
-        
+
     }
 
     return updateUser ? (
         <div className='account'>
             <div className='titleProfil'><h1>Mon profil</h1><span onClick={handleToggle}><BiDotsHorizontal /></span></div>
             <div className="cardProfile">
-                <div className="name">
+                <div className="photoProfil">
                     <img className='imgProfil' src={user.urlImage} alt="" />
-                    {user.username}
                 </div>
-                <div className="email">
-                    {user.email}
+                <div className='infoUser'>
+                    <div className="userName">
+                        {user.username}
+                    </div>
+                    <div className="email">
+                        {user.email}
+                    </div>
                 </div>
             </div>
-            <button onClick={handleLogout}>Déconnexion</button>
+            <div className='btnDeco'><button onClick={handleLogout}>Déconnexion</button></div>
+
         </div>
     ) : (
         <div className='account'>
@@ -114,13 +165,11 @@ const Account = ({ user, setUser }) => {
             <div className="cardProfile">
                 <form id='myForm' name='myForm'>
                     <input defaultValue={user.username} onChange={(e) => setUser({ ...user, username: e.target.value, })} name='username' type="text" />
-                    {/* <input placeholder='votre mdp' onChange={(e) =>
-                        setUser({ ...user, password: e.target.value, })}
-                        type="password" name='password' id='password' /> */}
                     <input name='image' onChange={(e) =>
                         setUser({ ...user, image: e.target.files[0], })} type="file" />
                     <textarea defaultValue={user.email} onChange={(e) => setUser({ ...user, email: e.target.value, })} name="email" id="" cols="30" rows="10"></textarea>
                     <button onClick={handleUpdate}>Validez les changement</button>
+                    <ToastContainer />
                     <button onClick={handleDelete}>Supprimer votre compte</button>
                     {deleteAccount ? (
                         <div className='opaque'>
@@ -128,7 +177,7 @@ const Account = ({ user, setUser }) => {
                                 <h4>Cette action est irreverssible</h4>
                                 <h5>êtes vous sur de vouloir supprimer votre compte ?</h5>
                                 <form className='formDeleteAccount'>
-                                    <input placeholder='confirmer par Oui' onChange={(e) =>  e.target.value } type="text" />
+                                    <input placeholder='confirmer par Oui' onChange={(e) => e.target.value} type="text" />
                                     <button onClick={handleEraseCount}>Supprimer</button>
                                     <button onClick={handleDelete}>Annuler</button>
                                 </form>
@@ -137,7 +186,7 @@ const Account = ({ user, setUser }) => {
                     ) : (
                         null
                     )}
-                    
+
                 </form>
             </div>
         </div>
