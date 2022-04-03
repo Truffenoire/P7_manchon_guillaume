@@ -4,6 +4,7 @@ const userValid = require('../validation/userValide')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
+require('dotenv').config();
 
 
 
@@ -50,7 +51,7 @@ const login = async (req, res, next) => {
         else if (test) {
             // GENERATION DU TOKEN
             const token = jwt.sign(
-                { id: user.id, email: user.email }, 'RANDOM_TOKEN_SECRET', { expiresIn: '24h' })
+                { id: user.id, email: user.email }, process.env.SECRET_TOKEN, { expiresIn: '24h' })
             // console.log(token);
             return res.json({ token, user })
         }

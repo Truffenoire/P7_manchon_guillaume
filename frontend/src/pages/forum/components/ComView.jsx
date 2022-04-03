@@ -9,11 +9,10 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
     const acces_forum = localStorage.getItem('keyToken')
     const commentaire = post.comments
     const isAdmin = user.isAdmin
-    // setComments(post.comments)
+    const [updateComment, setUpdateComment] = useState(comments)
 
     const handleDelete = async (e, index) => {
 
-        // console.log(userId);
         const spanVisé = e.target.closest('span')
         const indexCom = spanVisé.getAttribute('data-index')
         // console.log(indexCom);
@@ -33,9 +32,9 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
     }
     // State pour update
     const [updateState, setUpdateState] = useState(true)
+    
     const handleToggle = () => {
         setUpdateState(!updateState)
-        // console.log(updateState);
     }
     // Pour update les commentaires
     const handleUpdate = async (e) => {
@@ -48,19 +47,14 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                 'authorization': 'bearer ' + acces_forum,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(comments),
+            body: JSON.stringify(updateComment),
         })
             // set pour declanger le useEffect et actualiser la page
             .then((res) => {
                 res.json()
                 setUpdateState(!updateState)
-                // setComments()
+                setComments(updateComment)
             })
-            // .then((data) => {
-            //     setComments()
-            //     console.log(data);
-            //     console.log(comments);
-            // })
             .catch(err => console.log(err));
 
     }
@@ -81,7 +75,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                             {updateState ?
                                 <span className='userText'>{com.text}</span>
                                 :
-                                <input defaultValue={com.text} onChange={(e) => setComments({ ...comments, text: e.target.value, })} type="text" />
+                                <input defaultValue={com.text} onChange={(e) => setUpdateComment({ ...comments, text: e.target.value, })} type="text" />
                             }
                             <div className='updateDelete'>
                                 {updateState ?

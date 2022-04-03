@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const Comment = require('../models/comment')
 const Post = require('../models/post')
 const User = require('../models/user')
+require('dotenv').config();
 
 
 const createComment = async (req, res, next) => {
@@ -10,7 +11,7 @@ const createComment = async (req, res, next) => {
     const { id } = req.params;
     // console.log({ body, id });
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
     const tokenId = decodedToken.id
     // let user = await User.findByPk(id)
     // console.log("TOKEN DANS CREATE POST", tokenId, id, body);

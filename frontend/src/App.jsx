@@ -1,4 +1,4 @@
-import { Routes, Route, useParams } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 
 //import des routes
 import Header from './components/Header'

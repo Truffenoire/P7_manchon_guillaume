@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes, Model } = require('sequelize')
+require('dotenv').config();
 
 // CONNECTION avec SEQUELIZE en asyncrhone
-const sequelize = new Sequelize('userTest', 'root', 'root', {
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_LOG, process.env.DB_LOG_MDP, {
     host: 'localhost',
     dialect: 'mysql'
 });

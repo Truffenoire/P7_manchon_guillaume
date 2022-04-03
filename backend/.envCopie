@@ -1,0 +1,4 @@
+SECRET_TOKEN=''
+DB_NAME=''
+DB_LOG=''
+DB_LOG_MDP=''

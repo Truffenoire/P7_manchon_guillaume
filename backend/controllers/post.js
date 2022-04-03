@@ -4,6 +4,7 @@ const Post = require('../models/post')
 const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 const fs = require('fs');
+require('dotenv').config();
 
 
 
@@ -11,7 +12,7 @@ const createOnePost = async (req, res, next) => {
     const { body } = req;
     // console.log(body);
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
     const tokenId = decodedToken.id
     // console.log("TOKEN DANS CREATE POST", tokenId);
     // console.log(req.file);
@@ -157,7 +158,7 @@ const likeUnlike = async (req, res, next) => {
     console.log('REQ DES LIKE', req.body);
     const like = req.body.like;
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
     const userId = decodedToken.id
     console.log(like);
 
