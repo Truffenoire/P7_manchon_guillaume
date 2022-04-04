@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import { Zoom } from 'react-toastify';
+// Import de composant pour le formulaire
 import InputMail from './components/ImputMail'
 import InputName from './components/InputName'
 import InputPassword from './components/InputPassword'
@@ -35,6 +36,7 @@ function Home({ setUser }) {
       .then(res => {
         res.json()
         console.log(res);
+        if(res.status === 401){
         setTimeout(() => {
           toast.info(`formulaire non valide  !`, {
             theme: "colored",
@@ -48,6 +50,7 @@ function Home({ setUser }) {
             progress: undefined,
           });
         }, 500)
+      }
         if (res.status === 201) {
 
           const requet = {
@@ -91,51 +94,9 @@ function Home({ setUser }) {
       })
   }
 
-  // REGEX EMAIL
-  // let formEmail = document.getElementById('email')
-  // const validMail = (inputMail) => {
-  //   let emailRegExp = new RegExp('^[a-zA-Z0-9ôöáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
-  //   // let testMail = formEmail.value != null? emailRegExp.test(formEmail.value) : true
-  //   let testMail = emailRegExp.test(inputMail.target.value)
-  //   console.log(testMail);
-
-  //   if (testMail) {
-  //     formEmail.classList.add('testMailValid')
-  //   } else {
-  //     formEmail.classList.add('testMailError')
-  //   }
-  // }
-  // REGEX NOM
-  // let formName = document.getElementById('name')
-  // const validName = (inputName) => {
-  //   let emailRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
-  //   let testMail = formName.value != null ? emailRegExp.test(formName.value) : true
-  //   console.log(formName.value.length);
-  //   console.log(testMail);
-  //   if (testMail && formName.value.length >= 4 && formName.value.length <= 15) {
-  //     formName.style.backgroundColor = '#0080003b'
-  //     formName.style.color = 'white'
-  //   } else {
-  //     formName.style.backgroundColor = '#ff00006b'
-  //     formName.style.color = 'white'
-  //   }
-  // }
-  // REGEX MDP
-  // let formPassword = document.getElementById('password')
-  // const validPassword = (inputPassword) => {
-  //   let passwordRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
-  //   let testPassword = formPassword.value != null ? passwordRegExp.test(formPassword.value) : true
-  //   console.log(formPassword.value.length);
-  //   console.log(testPassword);
-  //   if (testPassword && formPassword.value.length >= 4) {
-  //     formPassword.style.backgroundColor = '#0080003b'
-  //     formPassword.style.color = 'white'
-  //   } else {
-  //     formPassword.style.backgroundColor = '#ff00006b'
-  //     formPassword.style.color = 'white'
-  //   }
-  // }
-
+  const formFile = Boolean(document.getElementById('file'))
+  const file = document.getElementById('file')
+  
 
   return (
     <div className='homePage'>
@@ -153,10 +114,14 @@ function Home({ setUser }) {
             <InputPassword setUserSignup={setUserSignup} userSignup={userSignup} />
 
             <label className='photoProfilHome' htmlFor="file">photo de profil</label>
-            <input onChange={(e) =>
+            <input  onChange={(e) =>
               setUserSignup({ ...userSignup, image: e.target.files[0]/*.name*/, })}
-              type="file" name='file' id='file' required />
-
+              type="file" name='file' id='file' />
+            <div className='docUser'>
+              {
+                formFile === false? "choisir un fichier" : file.value.split(`\\`)[2] 
+              }
+            </div>
             <br></br>
             <button type='submit'>Connection</button>
           </form>

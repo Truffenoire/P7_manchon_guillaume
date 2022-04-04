@@ -5,7 +5,7 @@ const InputPassword = ({ userSignup, setUserSignup }) => {
     const [valuePassword, setValuePassword] = useState("")
     // REGEX PASSWORD
     const validPassword = (inputPassword) => {
-        let passwordRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
+        let passwordRegExp = new RegExp('^[a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
         setTestPassword(passwordRegExp.test(inputPassword.target.value))
         setValuePassword(inputPassword.target.value)
     }

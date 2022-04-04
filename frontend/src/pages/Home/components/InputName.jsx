@@ -5,14 +5,14 @@ const InputName = ({ setUserSignup, userSignup }) => {
     const [value, setValue] = useState("")
     // REGEX NOM
     const validName = (inputName) => {
-        let nameRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
+        let nameRegExp = new RegExp('^[a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
         setTestName(nameRegExp.test(inputName.target.value))
         setValue(inputName.target.value)
     }
     return (
         <>
             {
-                testName && value.length >= 4 && value.length <= 15 ?
+                testName && value.length >= 3 && value.length <= 15 ?
                     <input className='valid' onInput={validName} onChange={(e) =>
                         setUserSignup({ ...userSignup, username: e.target.value, })}
                         type="text" name='username' id='name' placeholder='Nom' required />
