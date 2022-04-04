@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom"
 
 //import des routes
 import Header from './components/Header'
-import Home from "./pages/Home"
+import Home from "./pages/Home/Home"
 import Forum from "./pages/forum/Forum"
 import Login from "./pages/Login"
 import NotFound from "./pages/NotFound"

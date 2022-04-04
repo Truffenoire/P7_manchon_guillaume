@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import { Zoom } from 'react-toastify';
-
+import InputMail from './components/ImputMail'
+import InputName from './components/InputName'
+import InputPassword from './components/InputPassword'
 
 
 function Home({ setUser }) {
@@ -90,50 +92,49 @@ function Home({ setUser }) {
   }
 
   // REGEX EMAIL
-  let formEmail = document.getElementById('email')
-  const validMail = (inputMail) => {
-      let emailRegExp = new RegExp ('^[a-zA-Z0-9ôöáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
-      let testMail = emailRegExp.test(formEmail.value)
-      console.log(formEmail.value);
-      console.log(testMail);
-      if(testMail){
-          formEmail.style.backgroundColor ='#0080003b'
-          formEmail.style.color ='white'
-      }else{   
-          formEmail.style.backgroundColor ='#ff00006b'
-          formEmail.style.color ='white'
-      }   
-  }
+  // let formEmail = document.getElementById('email')
+  // const validMail = (inputMail) => {
+  //   let emailRegExp = new RegExp('^[a-zA-Z0-9ôöáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
+  //   // let testMail = formEmail.value != null? emailRegExp.test(formEmail.value) : true
+  //   let testMail = emailRegExp.test(inputMail.target.value)
+  //   console.log(testMail);
+
+  //   if (testMail) {
+  //     formEmail.classList.add('testMailValid')
+  //   } else {
+  //     formEmail.classList.add('testMailError')
+  //   }
+  // }
   // REGEX NOM
-  let formName = document.getElementById('name')
-  const validName = (inputName) => {
-      let emailRegExp = new RegExp ('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
-      let testMail = emailRegExp.test(formName.value)
-      console.log(formName.value.length);
-      console.log(testMail);
-      if(testMail && formName.value.length >= 4 && formName.value.length <= 15){
-          formName.style.backgroundColor ='#0080003b'
-          formName.style.color ='white'
-      }else{   
-          formName.style.backgroundColor ='#ff00006b'
-          formName.style.color ='white'
-      }   
-  }
+  // let formName = document.getElementById('name')
+  // const validName = (inputName) => {
+  //   let emailRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
+  //   let testMail = formName.value != null ? emailRegExp.test(formName.value) : true
+  //   console.log(formName.value.length);
+  //   console.log(testMail);
+  //   if (testMail && formName.value.length >= 4 && formName.value.length <= 15) {
+  //     formName.style.backgroundColor = '#0080003b'
+  //     formName.style.color = 'white'
+  //   } else {
+  //     formName.style.backgroundColor = '#ff00006b'
+  //     formName.style.color = 'white'
+  //   }
+  // }
   // REGEX MDP
-  let formPassword = document.getElementById('password')
-  const validPassword = (inputPassword) => {
-      let passwordRegExp = new RegExp ('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
-      let testPassword = passwordRegExp.test(formPassword.value)
-      console.log(formPassword.value.length);
-      console.log(testPassword);
-      if(testPassword && formPassword.value.length >= 4){
-        formPassword.style.backgroundColor ='#0080003b'
-        formPassword.style.color ='white'
-      }else{   
-        formPassword.style.backgroundColor ='#ff00006b'
-        formPassword.style.color ='white'
-      }   
-  }
+  // let formPassword = document.getElementById('password')
+  // const validPassword = (inputPassword) => {
+  //   let passwordRegExp = new RegExp('^[a-zA-Z-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ._\s-]*$', 'g');
+  //   let testPassword = formPassword.value != null ? passwordRegExp.test(formPassword.value) : true
+  //   console.log(formPassword.value.length);
+  //   console.log(testPassword);
+  //   if (testPassword && formPassword.value.length >= 4) {
+  //     formPassword.style.backgroundColor = '#0080003b'
+  //     formPassword.style.color = 'white'
+  //   } else {
+  //     formPassword.style.backgroundColor = '#ff00006b'
+  //     formPassword.style.color = 'white'
+  //   }
+  // }
 
 
   return (
@@ -146,27 +147,20 @@ function Home({ setUser }) {
         </div>
         <div className="form">
           <form onSubmit={handleSubmit} name="myForm" id="myForm" action="/uploadmultiple" method='post'>
-            {/* <label htmlFor="name">Nom</label> */}
-            <input onInput={validName} onChange={(e) =>
-              setUserSignup({ ...userSignup, username: e.target.value, })}
-              type="text" name='username' id='name' placeholder='Nom' required />
-            {/* <label htmlFor="email">Email</label> */}
-            <input onInput={validMail} onChange={(e) =>
-              setUserSignup({ ...userSignup, email: e.target.value, })}
-              type="text" name='email' id='email' placeholder='Email' required />
-            {/* <label htmlFor="password">Password</label> */}
-            <input onInput={validPassword} onChange={(e) =>
-              setUserSignup({ ...userSignup, password: e.target.value, })}
-              type="password" name='password' id='password' placeholder='Password' required />
+
+            <InputName setUserSignup={setUserSignup} userSignup={userSignup} />
+            <InputMail setUserSignup={setUserSignup} userSignup={userSignup} />
+            <InputPassword setUserSignup={setUserSignup} userSignup={userSignup} />
+
             <label className='photoProfilHome' htmlFor="file">photo de profil</label>
             <input onChange={(e) =>
               setUserSignup({ ...userSignup, image: e.target.files[0]/*.name*/, })}
               type="file" name='file' id='file' required />
 
             <br></br>
-            <button type='submit' /*onClick={handleClick}*/>Connection</button>
+            <button type='submit'>Connection</button>
           </form>
-          
+
           <Link to="/login">Déjà inscrit, connectez vous</Link>
         </div>
 

@@ -49,6 +49,20 @@
     }
     form{
         margin-bottom: 60px; 
+        .nonValid{
+            background-color: #ff00006b; 
+            color: white;
+            &:focus{
+                color: black;
+            } 
+        }
+        .valid{
+            background-color: #0080003b;
+            color: white;
+            &:focus{
+                color: black;
+            }
+        }
     }
     input{
         margin: 10px auto; 
