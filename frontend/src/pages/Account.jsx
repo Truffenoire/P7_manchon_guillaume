@@ -145,7 +145,7 @@ const Account = ({ user, setUser, comments, setComments }) => {
             <div className='titleProfil'><h1>Mon profil</h1><span onClick={handleToggle}><BiDotsHorizontal /></span></div>
             <div className="cardProfile">
                 <div className="photoProfil">
-                    <img className='imgProfil' src={user.urlImage} alt="" />
+                    <img className='imgProfil' src={user.urlImage} alt="img de Profil" />
                 </div>
                 <div className='infoUser'>
                     <div className="userName">

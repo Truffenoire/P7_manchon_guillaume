@@ -70,7 +70,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
             }).map((com, e, index) => {
                 return commentaire[e].userId === user.id ? (
                     <div className='flexCom' key={com.id}>
-                        <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
+                        <div className='titleComment'><img src={com.userImg} alt="pic-profil" /><span className='userCom'>{com.username}</span></div>
                         <div className='commentCard'>
                             {updateState ?
                                 <span className='userText'>{com.text}</span>
@@ -95,7 +95,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                 )
                     : isAdmin ? (
                         <div className='flexCom' key={com.id}>
-                            <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
+                            <div className='titleComment'><img src={com.userImg} alt="pic-profil" /><span className='userCom'>{com.username}</span></div>
                             <div className='commentCard'>
                             <span className='userText'>{com.text}</span>
                             <span onClick={handleDelete} data-index={e}><FaTrashAlt /></span>
@@ -104,7 +104,7 @@ const ComView = ({ post, user, posted, setPosted, comments, setComments }) => {
                         </div>
                     ) : (
                         <div className='flexCom' key={com.id}>
-                            <div className='titleComment'><img src={com.userImg} alt="pic" /><span className='userCom'>{com.username}</span></div>
+                            <div className='titleComment'><img src={com.userImg} alt="pic-profil" /><span className='userCom'>{com.username}</span></div>
                             <span className='userText'>{com.text}</span>
                             <span></span>
                             <DayJS className='commentDate' element='div' format='DD-MM-YYYY à HH:mm:ss'>{comments.createdAt}</DayJS>
