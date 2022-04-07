@@ -103,7 +103,6 @@ function Home({ setUser }) {
       <div className='home'>
 
         <div className="accueil">
-          {/* <h1>Bienvenue chez Groupomania</h1> */}
           <p>Participez au réseau d'entreprise en remplissant ce formulaire.</p>
         </div>
         <div className="form">

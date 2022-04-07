@@ -9,7 +9,7 @@
         width: 80%; 
         align-items: center;
         input, textarea, button { 
-            width: 50%;
+            width: 30%;
         }
     }
     .titleProfil{
@@ -74,13 +74,18 @@
         position: absolute;
         top: 30%;
         left: 50%;
-        width: 60%; 
+        width: 50%; 
         height: 180px;
         border-radius: 20px;
         text-align: center;
         background-color: #091F43; 
         transform: translate(-50%);
         z-index: 1000;
+        .formDeleteAccount{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
     }
 }
 @media screen and (min-width: 768px){

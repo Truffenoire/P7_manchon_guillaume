@@ -48,7 +48,7 @@
         }
     }
     form{
-        margin-bottom: 60px; 
+        margin-bottom: 15px; 
         .nonValid{
             background-color: #ff00006b; 
             color: white;
@@ -127,6 +127,9 @@
             background-position: center;
             z-index: -1; 
         } 
+        .home{
+            height: 390px;
+        }
     } 
 }
 @media screen and (min-width: 1440px){ 
