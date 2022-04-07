@@ -95,6 +95,7 @@ const Account = ({ user, setUser, comments, setComments }) => {
         setDeteleAccound(!deleteAccount)
         console.log(!deleteAccount);
     }
+    // suppression du compte
     const handleEraseCount = async (e) => {
         e.preventDefault()
         const formDelete = e.target.closest('form');

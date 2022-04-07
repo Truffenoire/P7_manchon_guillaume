@@ -28,7 +28,7 @@ function Home({ setUser }) {
     formData.append("password", userSignup.password)
     formData.append("image", userSignup.image)
 
-
+// inscription
     await fetch("http://localhost:3000/user/signup", {
       method: 'POST',
       body: formData,
@@ -52,7 +52,7 @@ function Home({ setUser }) {
         }, 500)
       }
         if (res.status === 201) {
-
+// si valide login dans la foulée
           const requet = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

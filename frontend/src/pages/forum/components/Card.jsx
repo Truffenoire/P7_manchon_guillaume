@@ -189,7 +189,7 @@ const Card = ({ post, setPosts, user, posted, setPosted, comments, setComments }
             {/* <div className='titlePost'>{post.title}</div> */}
             <div className='textPost'>{post.text}</div>
             <div className='imgPost'>
-                <img src={post.urlImage} alt="img de Profil" />
+                <img src={post.urlImage} alt={post.urlImage} />
             </div>
             <div className='footerCard'>
                 <div onClick={handleComment} className="comment"> <FaCommentDots /> {post.comments.length}</div>

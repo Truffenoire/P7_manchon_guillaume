@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import { Zoom } from 'react-toastify';
@@ -14,6 +14,7 @@ const Forum = ({ user, setUser, token, setToken, comments, setComments }) => {
   const { id } = useParams();
   const [posted, setPosted] = useState(false)
   const [post, setPosts] = useState([])
+  const ref = useRef();
 
   const acces_forum = localStorage.getItem('keyToken')
   // Maintient de la session
@@ -78,12 +79,18 @@ const Forum = ({ user, setUser, token, setToken, comments, setComments }) => {
           progress: undefined,
           })
         setPosted(true)
-        setNewPost({ ...newPost, text:"" })
-        console.log(post);
+        setNewPost({ ...newPost, text:"", image: "" })   
+        console.log(newPost);
       })
       .catch(err => console.log(err))
+      
+      ref.current.value = null;
+      // const formReset = document.getElementsByClassName('formForum')
+      // console.log(formReset);
+      formData.append("image", null)
   }
-
+  const formFile = Boolean(document.getElementById('file'))
+  const file = document.getElementById('file')
 
   return acces_forum ? (
     <div className="container">
@@ -94,9 +101,15 @@ const Forum = ({ user, setUser, token, setToken, comments, setComments }) => {
         <textarea onChange={(e) => setNewPost({ ...newPost, text: e.target.value })} placeholder='Message' type="text" id='text' value={newPost.text} required />
         <label className='labelFile' htmlFor="file">
           <input onChange={(e) =>
-            setNewPost({ ...newPost, image: e.target.files[0], })} type="file" id='file' />
+            setNewPost({ ...newPost, image: e.target.files[0] })} type="file" id='file' ref={ref}/>
+          
           <span className='noFile'>Ajoutez une photo</span>
-          {/* <span className='fileAdd'>Photo ajouté !</span> */}
+          <div className='docUser'>
+              {
+                formFile === false? "choisir un fichier" : file.value.split(`\\`)[2] 
+              }
+            </div>
+         
 
         </label>
         <button type='submit'><FaTelegramPlane /></button>

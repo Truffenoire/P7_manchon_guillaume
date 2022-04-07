@@ -28,7 +28,7 @@ function App() {
           <Route path="/forum/:id" element={<Forum comments={comments} setComments={setComments} user={user} setUser={setUser} token={token} setToken={setToken} />} />
           <Route path="/compte/:id" element={<Account comments={comments} setComments={setComments} user={user} setUser={setUser} />} />
           <Route path="/comment/:id" element={<Comment comments={comments} setComments={setComments} post={post} setPosts={setPosts} user={user} token={token} />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFound user={user} />} />
         </Routes>
       </div>
   )
